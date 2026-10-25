@@ -1,0 +1,13 @@
+{
+  "name": "saar-prf-frontend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "watch": "tsc -p tsconfig.json --watch"
+  },
+  "devDependencies": {
+    "chart.js": "4.4.1",
+    "typescript": "5.9.3"
+  }
+}

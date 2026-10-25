@@ -1,0 +1,12 @@
+target/
+node_modules/
+.idea/
+*.iml
+.vscode/
+
+.env
+
+dados/brutos/
+dados/carga/
+*.zip
+dados/amostra/

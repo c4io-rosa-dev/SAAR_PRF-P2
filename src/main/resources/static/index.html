@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SAAR PRF — Análise de Acidentes Rodoviários</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/lib/chart.umd.js"></script>
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+<header class="topo">
+  <div>
+    <h1>SAAR PRF</h1>
+    <p>Sistema de Análise de Acidentes Rodoviários · dados abertos da Polícia Rodoviária Federal</p>
+  </div>
+  <div class="contador" id="contador">—</div>
+</header>
+
+<main>
+  <section class="card" id="secao-importacao">
+    <h2>Importar arquivo</h2>
+    <div class="linha">
+      <input type="file" id="arquivo" accept=".csv">
+      <button type="button" id="btn-importar">Importar</button>
+    </div>
+    <div id="resultado-importacao" class="resultado"></div>
+  </section>
+
+  <section class="card" id="secao-filtros">
+    <h2>Filtros</h2>
+    <div class="linha">
+      <label>UF <select id="filtro-uf"><option value="">Todas</option></select></label>
+      <label>Classificação <select id="filtro-classificacao"><option value="">Todas</option></select></label>
+      <label>De <input type="date" id="filtro-inicio"></label>
+      <label>Até <input type="date" id="filtro-fim"></label>
+      <button type="button" id="btn-filtrar">Aplicar</button>
+      <button type="button" id="btn-limpar-filtros" class="secundario">Limpar</button>
+    </div>
+    <div class="linha">
+      <label>Buscar por ID <input type="number" id="busca-id" min="1"></label>
+      <button type="button" id="btn-buscar">Buscar</button>
+    </div>
+    <div id="detalhe-registro" class="detalhe" hidden></div>
+  </section>
+
+  <section class="graficos">
+    <div class="card">
+      <h2>Principais causas de acidentes</h2>
+      <div class="area-grafico"><canvas id="grafico-causas"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>Evolução mensal</h2>
+      <div class="area-grafico"><canvas id="grafico-mensal"></canvas></div>
+    </div>
+  </section>
+
+  <section class="card" id="secao-tabela">
+    <h2>Registros</h2>
+    <div class="tabela-rolagem">
+      <table>
+        <thead>
+        <tr>
+          <th>ID</th><th>Data</th><th>Hora</th><th>UF</th><th>Município</th><th>Rodovia</th>
+          <th>Causa</th><th>Classificação</th><th>Mortos / Feridos</th><th>Ações</th>
+        </tr>
+        </thead>
+        <tbody id="corpo-tabela"></tbody>
+      </table>
+    </div>
+    <div class="paginacao">
+      <button type="button" id="pag-anterior" class="secundario">Anterior</button>
+      <span id="pag-info"></span>
+      <button type="button" id="pag-proxima" class="secundario">Próxima</button>
+    </div>
+  </section>
+
+  <section class="card" id="secao-formulario">
+    <h2 id="titulo-form">Cadastrar acidente</h2>
+    <form id="form-acidente" novalidate>
+      <input type="hidden" id="campo-id">
+      <div class="grade">
+        <label>Data <input type="date" id="campo-dataOcorrencia"></label>
+        <label>Horário <input type="time" id="campo-horario"></label>
+        <label>UF <select id="campo-uf"><option value="">Selecione</option></select></label>
+        <label>Município <input type="text" id="campo-municipio" maxlength="60"></label>
+        <label>Rodovia (BR) <input type="number" id="campo-rodovia" min="1" max="999"></label>
+        <label>Quilômetro <input type="number" id="campo-quilometro" step="0.1" min="0"></label>
+        <label class="largo">Causa <input type="text" id="campo-causaAcidente" list="lista-causas" maxlength="120"></label>
+        <label>Tipo <input type="text" id="campo-tipoAcidente" list="lista-tipos" maxlength="60"></label>
+        <label>Classificação <select id="campo-classificacao"><option value="">Selecione</option></select></label>
+        <label>Mortos <input type="number" id="campo-mortos" min="0" value="0"></label>
+        <label>Feridos <input type="number" id="campo-feridos" min="0" value="0"></label>
+        <label>Latitude <input type="number" id="campo-latitude" step="any"></label>
+        <label>Longitude <input type="number" id="campo-longitude" step="any"></label>
+      </div>
+      <datalist id="lista-causas"></datalist>
+      <datalist id="lista-tipos"></datalist>
+      <div class="linha">
+        <button type="submit" id="btn-salvar">Salvar</button>
+        <button type="button" id="btn-cancelar" class="secundario">Cancelar</button>
+      </div>
+    </form>
+  </section>
+</main>
+
+<div id="toasts" class="toasts" aria-live="polite"></div>
+</body>
+</html>
