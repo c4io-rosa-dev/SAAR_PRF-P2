@@ -2,7 +2,7 @@
 
 Aplicação web para importar, consultar, alterar, excluir, filtrar e visualizar os acidentes em rodovias federais publicados pela Polícia Rodoviária Federal.
 
-Projeto 03 · Programação Avançada Orientada a Objetos · FATEC Zona Leste · Grupo 03
+Projeto 03 · Programação Avançada Orientada a Objetos · FATEC Ipiranga · Grupo 03
 
 ## Fonte dos dados
 

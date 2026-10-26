@@ -1,6 +1,6 @@
 # SAAR PRF — Especificação de design
 
-Projeto 03 · Programação Avançada OO · FATEC Zona Leste · Grupo 03
+Projeto 03 · Programação Avançada OO · FATEC Ipiranga · Grupo 03
 Data: 25/10/2026 · Entrega do código/relatório: 31/10/2026 · Apresentações: 07/11 e 14/11/2026
 
 ## 1. Objetivo
