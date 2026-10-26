@@ -5,105 +5,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SAAR PRF — Análise de Acidentes Rodoviários</title>
   <link rel="stylesheet" href="css/style.css">
-  <script src="js/lib/chart.umd.js"></script>
-  <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/inicio.js"></script>
 </head>
-<body>
-<header class="topo">
-  <div>
-    <h1>SAAR PRF</h1>
-    <p>Sistema de Análise de Acidentes Rodoviários · dados abertos da Polícia Rodoviária Federal</p>
-  </div>
-  <div class="contador" id="contador">—</div>
+<body class="pagina-inicial">
+<header class="topo topo-inicio">
+  <a class="marca" href="./">
+    <span class="selo"><span class="icone">shield</span>PRF</span>
+    <div class="marca-texto">
+      <strong>SAAR PRF</strong>
+      <span>Sistema de Análise de Acidentes Rodoviários</span>
+    </div>
+  </a>
+  <a class="botao botao-contorno" href="painel.html">Acessar painel<span class="icone">arrow_forward</span></a>
 </header>
 
-<main>
-  <section class="card" id="secao-importacao">
-    <h2>Importar arquivo</h2>
-    <div class="linha">
-      <input type="file" id="arquivo" accept=".csv">
-      <button type="button" id="btn-importar">Importar</button>
+<section class="hero">
+  <div class="hero-conteudo">
+    <span class="selo-hero"><span class="ponto"></span>Dados abertos da PRF · 2025–2026</span>
+    <h1>Os acidentes das rodovias federais, em dados.</h1>
+    <p>Importação, tratamento e análise dos registros oficiais da Polícia Rodoviária Federal para entender onde, quando e por que os acidentes acontecem.</p>
+    <div class="hero-acoes">
+      <a class="botao botao-destaque botao-grande" href="painel.html">Acessar painel analítico<span class="icone">arrow_forward</span></a>
+      <a class="botao botao-contorno botao-grande" href="https://www.gov.br/prf/pt-br/acesso-a-informacao/dados-abertos/dados-abertos-da-prf" target="_blank" rel="noopener">Fonte oficial dos dados<span class="icone">open_in_new</span></a>
     </div>
-    <div id="resultado-importacao" class="resultado"></div>
-  </section>
+  </div>
+</section>
 
-  <section class="card" id="secao-filtros">
-    <h2>Filtros</h2>
-    <div class="linha">
-      <label>UF <select id="filtro-uf"><option value="">Todas</option></select></label>
-      <label>Classificação <select id="filtro-classificacao"><option value="">Todas</option></select></label>
-      <label>De <input type="date" id="filtro-inicio"></label>
-      <label>Até <input type="date" id="filtro-fim"></label>
-      <button type="button" id="btn-filtrar">Aplicar</button>
-      <button type="button" id="btn-limpar-filtros" class="secundario">Limpar</button>
-    </div>
-    <div class="linha">
-      <label>Buscar por ID <input type="number" id="busca-id" min="1"></label>
-      <button type="button" id="btn-buscar">Buscar</button>
-    </div>
-    <div id="detalhe-registro" class="detalhe" hidden></div>
+<main class="inicio">
+  <section class="destaques" aria-label="Números da base">
+    <article class="destaque destaque-ciano">
+      <strong id="destaque-total">—</strong>
+      <span>acidentes registrados</span>
+    </article>
+    <article class="destaque destaque-vermelho">
+      <strong id="destaque-mortos">—</strong>
+      <span>vidas perdidas</span>
+    </article>
+    <article class="destaque destaque-laranja">
+      <strong id="destaque-rodovia">—</strong>
+      <span id="destaque-rodovia-texto">rodovia com mais acidentes</span>
+    </article>
   </section>
+  <p class="destaques-legenda" id="destaques-periodo">Carregando a base…</p>
 
-  <section class="graficos">
-    <div class="card">
-      <h2>Principais causas de acidentes</h2>
-      <div class="area-grafico"><canvas id="grafico-causas"></canvas></div>
-    </div>
-    <div class="card">
-      <h2>Evolução mensal</h2>
-      <div class="area-grafico"><canvas id="grafico-mensal"></canvas></div>
-    </div>
-  </section>
-
-  <section class="card" id="secao-tabela">
-    <h2>Registros</h2>
-    <div class="tabela-rolagem">
-      <table>
-        <thead>
-        <tr>
-          <th>ID</th><th>Data</th><th>Hora</th><th>UF</th><th>Município</th><th>Rodovia</th>
-          <th>Causa</th><th>Classificação</th><th>Mortos / Feridos</th><th>Ações</th>
-        </tr>
-        </thead>
-        <tbody id="corpo-tabela"></tbody>
-      </table>
-    </div>
-    <div class="paginacao">
-      <button type="button" id="pag-anterior" class="secundario">Anterior</button>
-      <span id="pag-info"></span>
-      <button type="button" id="pag-proxima" class="secundario">Próxima</button>
-    </div>
-  </section>
-
-  <section class="card" id="secao-formulario">
-    <h2 id="titulo-form">Cadastrar acidente</h2>
-    <form id="form-acidente" novalidate>
-      <input type="hidden" id="campo-id">
-      <div class="grade">
-        <label>Data <input type="date" id="campo-dataOcorrencia"></label>
-        <label>Horário <input type="time" id="campo-horario"></label>
-        <label>UF <select id="campo-uf"><option value="">Selecione</option></select></label>
-        <label>Município <input type="text" id="campo-municipio" maxlength="60"></label>
-        <label>Rodovia (BR) <input type="number" id="campo-rodovia" min="1" max="999"></label>
-        <label>Quilômetro <input type="number" id="campo-quilometro" step="0.1" min="0"></label>
-        <label class="largo">Causa <input type="text" id="campo-causaAcidente" list="lista-causas" maxlength="120"></label>
-        <label>Tipo <input type="text" id="campo-tipoAcidente" list="lista-tipos" maxlength="60"></label>
-        <label>Classificação <select id="campo-classificacao"><option value="">Selecione</option></select></label>
-        <label>Mortos <input type="number" id="campo-mortos" min="0" value="0"></label>
-        <label>Feridos <input type="number" id="campo-feridos" min="0" value="0"></label>
-        <label>Latitude <input type="number" id="campo-latitude" step="any"></label>
-        <label>Longitude <input type="number" id="campo-longitude" step="any"></label>
-      </div>
-      <datalist id="lista-causas"></datalist>
-      <datalist id="lista-tipos"></datalist>
-      <div class="linha">
-        <button type="submit" id="btn-salvar">Salvar</button>
-        <button type="button" id="btn-cancelar" class="secundario">Cancelar</button>
-      </div>
-    </form>
+  <section class="fluxo" aria-label="Como o sistema funciona">
+    <article>
+      <span class="icone">upload_file</span>
+      <div><h2>Importação</h2><p>O CSV oficial da PRF é enviado pela página e lido pela API.</p></div>
+    </article>
+    <article>
+      <span class="icone">fact_check</span>
+      <div><h2>Tratamento</h2><p>Cada linha é validada e padronizada; inválidas e duplicadas são contabilizadas.</p></div>
+    </article>
+    <article>
+      <span class="icone">insights</span>
+      <div><h2>Análise</h2><p>Filtros, indicadores e gráficos sobre os registros gravados no banco.</p></div>
+    </article>
   </section>
 </main>
 
-<div id="toasts" class="toasts" aria-live="polite"></div>
+<footer class="rodape">
+  <span><strong>SAAR PRF</strong> · Projeto acadêmico · FATEC Zona Leste · Programação Avançada Orientada a Objetos · Grupo 03</span>
+  <span>Fonte: Dados Abertos da Polícia Rodoviária Federal · CC BY-ND 3.0</span>
+</footer>
 </body>
 </html>

@@ -2,6 +2,8 @@ package br.edu.fatec.saarprf.repository;
 
 import br.edu.fatec.saarprf.dto.ContagemCausa;
 import br.edu.fatec.saarprf.dto.ContagemMensal;
+import br.edu.fatec.saarprf.dto.ContagemRodovia;
+import br.edu.fatec.saarprf.dto.TotaisAcidentes;
 import br.edu.fatec.saarprf.model.Acidente;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,6 +49,23 @@ public interface AcidenteRepository extends JpaRepository<Acidente, Long> {
                                       @Param("classificacao") String classificacao,
                                       @Param("dataInicio") LocalDate dataInicio,
                                       @Param("dataFim") LocalDate dataFim);
+
+    @Query("select new br.edu.fatec.saarprf.dto.TotaisAcidentes(count(a), coalesce(sum(a.mortos), 0L),"
+            + " coalesce(sum(a.feridos), 0L), min(a.dataOcorrencia), max(a.dataOcorrencia))"
+            + " from Acidente a where" + FILTRO)
+    TotaisAcidentes totalizar(@Param("uf") String uf,
+                              @Param("classificacao") String classificacao,
+                              @Param("dataInicio") LocalDate dataInicio,
+                              @Param("dataFim") LocalDate dataFim);
+
+    @Query("select new br.edu.fatec.saarprf.dto.ContagemRodovia(a.rodovia, count(a))"
+            + " from Acidente a where" + FILTRO
+            + " group by a.rodovia order by count(a) desc, a.rodovia")
+    List<ContagemRodovia> contarPorRodovia(@Param("uf") String uf,
+                                           @Param("classificacao") String classificacao,
+                                           @Param("dataInicio") LocalDate dataInicio,
+                                           @Param("dataFim") LocalDate dataFim,
+                                           Pageable limite);
 
     @Query("select a.idPrf from Acidente a where a.idPrf is not null")
     List<Long> buscarIdsPrf();

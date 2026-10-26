@@ -73,3 +73,13 @@ export interface Filtro {
   dataInicio: string;
   dataFim: string;
 }
+
+export interface ResumoAcidentes {
+  total: number;
+  mortos: number;
+  feridos: number;
+  dataInicial: string | null;
+  dataFinal: string | null;
+  rodoviaMaisCritica: string | null;
+  ocorrenciasRodovia: number;
+}

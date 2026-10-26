@@ -30,6 +30,15 @@ function limparErros(): void {
   }
 }
 
+function dialogo(): HTMLDialogElement {
+  return el<HTMLDialogElement>("dialogo-formulario");
+}
+
+export function abrirNovoRegistro(): void {
+  limparFormulario();
+  dialogo().showModal();
+}
+
 export function preencherFormulario(a: Acidente): void {
   limparErros();
   el<HTMLInputElement>("campo-id").value = String(a.id);
@@ -47,7 +56,7 @@ export function preencherFormulario(a: Acidente): void {
   campo("latitude").value = String(a.latitude);
   campo("longitude").value = String(a.longitude);
   el("titulo-form").textContent = `Editar registro #${a.id}`;
-  el("secao-formulario").scrollIntoView({ behavior: "smooth" });
+  dialogo().showModal();
 }
 
 export function lerFormulario(): { id: number | null; dados: AcidenteEntrada } {
@@ -76,8 +85,13 @@ export function lerFormulario(): { id: number | null; dados: AcidenteEntrada } {
 export function limparFormulario(): void {
   el<HTMLFormElement>("form-acidente").reset();
   el<HTMLInputElement>("campo-id").value = "";
-  el("titulo-form").textContent = "Cadastrar acidente";
+  el("titulo-form").textContent = "Novo registro";
   limparErros();
+}
+
+export function fecharFormulario(): void {
+  limparFormulario();
+  dialogo().close();
 }
 
 export function marcarErros(erros: Record<string, string>): void {

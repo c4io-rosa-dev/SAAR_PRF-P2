@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"secondary-container":"#ff8340","on-surface-variant":"#44474c","surface":"#f7f9ff","surface-tint":"#516072","on-secondary":"#ffffff","on-tertiary":"#ffffff","tertiary":"#061828","on-error":"#ffffff","outline-variant":"#c4c6cc","outline":"#74777d","on-tertiary-fixed":"#0b1d2d","on-background":"#131c26","primary-container":"#1e2d3d","on-primary":"#ffffff","error-container":"#ffdad6","surface-bright":"#f7f9ff","surface-container-lowest":"#ffffff","secondary-fixed":"#ffdbcb","surface-container-high":"#dfe9f6","tertiary-container":"#1c2d3d","primary":"#081828","on-tertiary-container":"#8395a8","on-tertiary-fixed-variant":"#37485a","tertiary-fixed-dim":"#b6c8dd","on-primary-fixed-variant":"#394859","secondary":"#a04100","surface-container-highest":"#d9e3f1","on-error-container":"#93000a","primary-fixed":"#d4e4f9","on-secondary-fixed-variant":"#7a3000","on-primary-fixed":"#0d1d2c","on-surface":"#131c26","surface-variant":"#d9e3f1","tertiary-fixed":"#d2e4fa","inverse-primary":"#b8c8dd","on-secondary-fixed":"#341000","on-primary-container":"#8594a8","on-secondary-container":"#682800","surface-container":"#e5effc","inverse-surface":"#28313b","surface-dim":"#d1dbe8","inverse-on-surface":"#e8f2ff","background":"#f7f9ff","error":"#ba1a1a","primary-fixed-dim":"#b8c8dd","surface-container-low":"#edf4ff","secondary-fixed-dim":"#ffb693"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-lg":"1rem","space-md":"0.75rem","space-xs":"0.25rem","margin":"1rem","space-xl":"1.5rem","space-sm":"0.375rem","gutter":"0.75rem"},"fontFamily":{"body-md":["Public Sans"],"headline-md":["Public Sans"],"title-sm":["Public Sans"],"label-numeric":["Public Sans"],"headline-lg":["Public Sans"],"label-caps":["Public Sans"],"body-sm":["Public Sans"],"display-lg":["Public Sans"]},"fontSize":{"body-md":["13px",{"lineHeight":"18px","fontWeight":"400"}],"headline-md":["20px",{"lineHeight":"26px","fontWeight":"600"}],"title-sm":["15px",{"lineHeight":"20px","fontWeight":"600"}],"label-numeric":["13px",{"lineHeight":"16px","fontWeight":"500"}],"headline-lg":["24px",{"lineHeight":"30px","fontWeight":"600"}],"label-caps":["11px",{"lineHeight":"14px","fontWeight":"700"}],"body-sm":["12px",{"lineHeight":"16px","fontWeight":"400"}],"display-lg":["32px",{"lineHeight":"38px","fontWeight":"700"}]}}}}</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 w-full z-50 bg-tertiary text-on-tertiary border-b border-tertiary-container"><div class="h-14 w-full px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md min-w-max"><div class="flex items-center gap-space-xs bg-primary-container px-space-sm py-1 border border-outline-variant/30 rounded-lg"><span class="material-symbols-outlined text-secondary-container text-[18px]">shield</span><span class="font-label-caps text-label-caps tracking-wider text-on-primary uppercase">PRF</span></div><div class="flex flex-col justify-center border-l border-outline-variant/20 pl-space-sm"><span class="font-title-sm text-title-sm text-on-tertiary leading-tight tracking-tight">PRF MALHA ANALÍTICA</span><span class="font-label-caps text-label-caps text-on-tertiary-container uppercase tracking-wider">Observatório Nacional de Segurança Viária</span></div></div><div class="hidden xl:flex items-center bg-tertiary-container/60 px-space-sm py-1 rounded-lg border border-outline-variant/20 gap-space-xs"><span class="material-symbols-outlined text-secondary text-[16px]">sync</span><span class="font-label-caps text-label-caps text-on-tertiary-fixed-variant uppercase">Base Atualizada: <strong class="text-on-tertiary font-bold">2024.Q4</strong> | Dados Abertos PRF</span></div><nav class="hidden md:flex items-stretch h-14" data-active-classes="bg-primary-container text-on-primary border-b-2 border-secondary-container"><a class="px-space-md flex items-center font-title-sm text-title-sm text-on-tertiary-container hover:text-on-tertiary hover:bg-tertiary-container transition-colors" data-path="visao-geral" href="#">Visão Geral</a><a class="px-space-md flex items-center font-title-sm text-title-sm text-on-tertiary-container hover:text-on-tertiary hover:bg-tertiary-container transition-colors" data-path="mapeamento-critico" href="#">Mapeamento Crítico</a><a class="px-space-md flex items-center font-title-sm text-title-sm text-on-tertiary-container hover:text-on-tertiary hover:bg-tertiary-container transition-colors" data-path="series-temporais" href="#">Séries Temporais</a><a class="px-space-md flex items-center font-title-sm text-title-sm text-on-tertiary-container hover:text-on-tertiary hover:bg-tertiary-container transition-colors" data-path="dados-abertos" href="#">Dados Abertos</a><a class="px-space-md flex items-center font-title-sm text-title-sm text-on-tertiary-container hover:text-on-tertiary hover:bg-tertiary-container transition-colors" data-path="metodologia" href="#">Metodologia</a></nav><div class="flex items-center gap-space-sm"><div class="hidden lg:flex items-center bg-surface-container-lowest/10 border border-outline-variant/30 rounded-lg px-space-xs h-8"><span class="material-symbols-outlined text-on-tertiary-container text-[16px] mr-1">calendar_today</span><span class="font-label-numeric text-label-numeric text-on-tertiary">2020 — 2024</span><span class="material-symbols-outlined text-on-tertiary-container text-[16px] ml-1">expand_more</span></div><button class="flex items-center gap-space-xs bg-secondary-container text-on-secondary px-space-md h-8 rounded-lg font-label-caps text-label-caps uppercase tracking-wider hover:bg-secondary transition-colors"><span class="material-symbols-outlined text-[16px]">download</span><span>Relatório Técnico</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center border border-outline-variant/30"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-14 bg-surface min-h-[calc(100vh-3.5rem)]"><div class="flex flex-col w-full">
+<!-- Sub-header / Status Toolbar -->
+<section class="w-full bg-surface-container-high px-gutter py-space-sm">
+<div class="w-full flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded bg-secondary-container"></span>
+<span class="font-label-caps text-label-caps uppercase text-primary tracking-wider">Painel Operacional PRF</span>
+</div>
+<span class="text-outline">/</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">SICONV - Banco Nacional de Ocorrências e Sinistros Viários</span>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px]">database</span>
+<span>Amostragem: 64.812 registros homologados</span>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>Último sync: 15/10/2024 04:30 BRT</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 1. Barra de Filtros Analíticos e Parâmetros -->
+<section class="w-full bg-surface-container-low p-gutter">
+<div class="bg-surface-container-lowest p-space-md rounded">
+<div class="flex items-center justify-between pb-space-sm mb-space-sm bg-surface-container-high px-space-sm py-1 rounded">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">tune</span>
+<span class="font-label-caps text-label-caps uppercase text-primary tracking-wider">Parâmetros de Filtragem e Recorte Espaço-Temporal</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Critérios ativos: BR-Todas | UF-Todas | Exercício 2024</span>
+</div>
+<form class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-space-sm" id="filter-form" onsubmit="event.preventDefault();">
+<!-- Ano / Período -->
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase" for="f-periodo">Exercício Fiscal</label>
+<div class="relative bg-surface-container-high rounded">
+<select class="w-full h-8 px-2 bg-transparent font-body-sm text-body-sm text-on-surface appearance-none focus:outline-none focus:bg-surface-container-highest cursor-pointer" id="f-periodo">
+<option value="2024">2024 (Acumulado Q1-Q4)</option>
+<option value="2023">2023 (Consolidado)</option>
+<option value="2022">2022 (Consolidado)</option>
+<option value="2021">2021 (Consolidado)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2 text-[16px] text-outline pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- UF -->
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase" for="f-uf">UF (Jurisdição)</label>
+<div class="relative bg-surface-container-high rounded">
+<select class="w-full h-8 px-2 bg-transparent font-body-sm text-body-sm text-on-surface appearance-none focus:outline-none focus:bg-surface-container-highest cursor-pointer" id="f-uf">
+<option value="all">Todas as Unidades (27 UFs)</option>
+<option value="MG">MG - Minas Gerais (Regional 04)</option>
+<option value="PR">PR - Paraná (Regional 07)</option>
+<option value="SC">SC - Santa Catarina (Regional 08)</option>
+<option value="SP">SP - São Paulo (Regional 03)</option>
+<option value="RJ">RJ - Rio de Janeiro (Regional 02)</option>
+<option value="BA">BA - Bahia (Regional 10)</option>
+<option value="RS">RS - Rio Grande do Sul (Regional 09)</option>
+<option value="GO">GO - Goiás (Regional 01)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2 text-[16px] text-outline pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Rodovia Federal -->
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase" for="f-rodovia">Rodovia Federal</label>
+<div class="relative bg-surface-container-high rounded">
+<select class="w-full h-8 px-2 bg-transparent font-body-sm text-body-sm text-on-surface appearance-none focus:outline-none focus:bg-surface-container-highest cursor-pointer" id="f-rodovia">
+<option value="all">Todas as Rodovias (BRs)</option>
+<option value="BR-101">BR-101 (Translitorânea)</option>
+<option value="BR-116">BR-116 (Presidente Dutra / Regis)</option>
+<option value="BR-381">BR-381 (Fernão Dias / Leste)</option>
+<option value="BR-153">BR-153 (Transbrasiliana)</option>
+<option value="BR-040">BR-040 (Brasília - Rio de Janeiro)</option>
+<option value="BR-277">BR-277 (Paranaguá - Foz)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2 text-[16px] text-outline pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Tipo de Pista -->
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase" for="f-pista">Perfil Geométrico</label>
+<div class="relative bg-surface-container-high rounded">
+<select class="w-full h-8 px-2 bg-transparent font-body-sm text-body-sm text-on-surface appearance-none focus:outline-none focus:bg-surface-container-highest cursor-pointer" id="f-pista">
+<option value="all">Todos os Perfis</option>
+<option value="simples">Pista Simples (Mão Dupla)</option>
+<option value="dupla">Pista Dupla c/ Canteiro</option>
+<option value="multipla">Pista Múltipla (3+ faixas)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2 text-[16px] text-outline pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Meteorologia -->
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase" for="f-clima">Condição Meteorológica</label>
+<div class="relative bg-surface-container-high rounded">
+<select class="w-full h-8 px-2 bg-transparent font-body-sm text-body-sm text-on-surface appearance-none focus:outline-none focus:bg-surface-container-highest cursor-pointer" id="f-clima">
+<option value="all">Todas as Condições</option>
+<option value="claro">Céu Claro / Bom Tempo</option>
+<option value="chuva">Chuva / Pista Molhada</option>
+<option value="nevoeiro">Nevoeiro / Neblina</option>
+<option value="nublado">Nublado</option>
+<option value="vento">Vento Forte</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-2 text-[16px] text-outline pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Ações -->
+<div class="flex items-end gap-space-xs">
+<button class="flex-1 h-8 bg-primary-container text-on-primary font-label-caps text-label-caps uppercase tracking-wider rounded hover:bg-primary transition-colors flex items-center justify-center gap-1" type="submit">
+<span class="material-symbols-outlined text-[16px]">filter_alt</span>
+<span>Aplicar</span>
+</button>
+<button class="h-8 px-2 bg-surface-container-high text-on-surface-variant font-label-caps text-label-caps uppercase rounded hover:bg-surface-container-highest transition-colors flex items-center justify-center title='Limpar filtros'" type="reset">
+<span class="material-symbols-outlined text-[16px]">restart_alt</span>
+</button>
+</div>
+</form>
+</div>
+</section>
+<!-- 2. Sumário Executivo de Métricas (Grid de 4 Indicadores Técnicos Assimétricos) -->
+<section class="w-full px-gutter py-space-md">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-space-md">
+<!-- Card 1: Total Sinistros (Col 4) -->
+<div class="lg:col-span-3 bg-surface-container-lowest p-space-md rounded flex flex-col justify-between relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary-container"></div>
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Total de Ocorrências</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Período 2024 acumulado</span>
+</div>
+<span class="material-symbols-outlined text-primary text-[20px]">traffic</span>
+</div>
+<div class="my-space-md flex items-baseline gap-space-xs">
+<span class="font-display-lg text-display-lg text-primary tracking-tight">64.812</span>
+<span class="font-label-numeric text-label-numeric text-secondary-container font-bold">+1.8%</span>
+</div>
+<div class="pt-space-xs bg-surface-container-low px-2 py-1 rounded flex items-center justify-between font-body-sm text-body-sm text-on-surface-variant">
+<span>Comparativo 2023: 63.665</span>
+<span class="font-label-numeric text-label-numeric">+1.147 casos</span>
+</div>
+</div>
+<!-- Card 2: Severidade / Fatais (Col 3) -->
+<div class="lg:col-span-3 bg-surface-container-lowest p-space-md rounded flex flex-col justify-between relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-secondary"></div>
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-secondary uppercase tracking-wider">Óbitos Homologados</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Vítimas Fatais em Local</span>
+</div>
+<span class="material-symbols-outlined text-secondary text-[20px]">warning</span>
+</div>
+<div class="my-space-md flex items-baseline gap-space-xs">
+<span class="font-display-lg text-display-lg text-secondary tracking-tight">5.210</span>
+<span class="font-label-numeric text-label-numeric text-on-surface-variant">óbitos</span>
+</div>
+<div class="pt-space-xs bg-surface-container-low px-2 py-1 rounded flex items-center justify-between font-body-sm text-body-sm text-on-surface-variant">
+<span>Letalidade: 80.3 / 1k acidentes</span>
+<span class="font-label-caps text-label-caps text-secondary font-bold">ALERTA 01</span>
+</div>
+</div>
+<!-- Card 3: Vítimas Feridas (Col 3) -->
+<div class="lg:col-span-3 bg-surface-container-lowest p-space-md rounded flex flex-col justify-between relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-outline"></div>
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Pessoas Feridas</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Graves e Leves Atendidos</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px]">medical_services</span>
+</div>
+<div class="my-space-md flex items-baseline gap-space-xs">
+<span class="font-display-lg text-display-lg text-primary tracking-tight">72.430</span>
+<span class="font-label-numeric text-label-numeric text-on-surface-variant font-medium">atendimentos</span>
+</div>
+<div class="pt-space-xs bg-surface-container-low px-2 py-1 rounded flex items-center justify-between font-body-sm text-body-sm text-on-surface-variant">
+<span>Graves: 18.102 (25%)</span>
+<span>Leves: 54.328 (75%)</span>
+</div>
+</div>
+<!-- Card 4: Trecho Crítico Maior Incidência (Col 3) -->
+<div class="lg:col-span-3 bg-surface-container-lowest p-space-md rounded flex flex-col justify-between relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Rodovia Mais Crítica</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Concentração de Sinistros</span>
+</div>
+<span class="material-symbols-outlined text-primary text-[20px]">alt_route</span>
+</div>
+<div class="my-space-md flex items-baseline gap-space-xs">
+<span class="font-display-lg text-display-lg text-primary tracking-tight">BR-101</span>
+<span class="font-label-numeric text-label-numeric text-secondary font-bold">18.4%</span>
+</div>
+<div class="pt-space-xs bg-surface-container-low px-2 py-1 rounded flex items-center justify-between font-body-sm text-body-sm text-on-surface-variant">
+<span>11.925 ocorrências</span>
+<span class="font-label-numeric text-label-numeric">Segmento SC / RJ / ES</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. Seção Analítica de Gráficos (Visualização Clara e Rigorosa) -->
+<section class="w-full px-gutter pb-space-md">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-md">
+<!-- Painel Esquerdo: Distribuição Temporal Mensal e Dias da Semana (Col 7) -->
+<div class="lg:col-span-7 bg-surface-container-lowest p-space-md rounded flex flex-col gap-space-md">
+<div class="flex flex-wrap items-center justify-between gap-space-xs pb-space-xs bg-surface-container-high px-space-sm py-1 rounded">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">timeline</span>
+<span class="font-label-caps text-label-caps uppercase text-primary tracking-wider">Evolução Mensal e Densidade Diária de Sinistros</span>
+</div>
+<div class="flex items-center gap-space-sm font-label-caps text-label-caps">
+<span class="flex items-center gap-1 text-on-surface-variant"><span class="w-2.5 h-1 bg-primary"></span> 2024</span>
+<span class="flex items-center gap-1 text-outline"><span class="w-2.5 h-1 bg-outline-variant"></span> 2023</span>
+</div>
+</div>
+<!-- SVG Gráfico Temporal Técnico -->
+<div class="w-full h-44 bg-surface-container-low p-space-xs flex flex-col justify-between">
+<div class="h-4 flex items-center justify-between px-2 text-on-surface-variant font-label-caps text-label-caps">
+<span>VOLUME MENSAL (MILHARES)</span>
+<span>MÉDIA MENSAL: 5.401 S/MÊS</span>
+</div>
+<div class="w-full h-32 relative">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 600 120">
+<!-- Grid horizontal cinza técnico -->
+<line stroke="#c4c6cc" stroke-dasharray="2,2" stroke-width="0.75" x1="0" x2="600" y1="20" y2="20"></line>
+<line stroke="#c4c6cc" stroke-dasharray="2,2" stroke-width="0.75" x1="0" x2="600" y1="50" y2="50"></line>
+<line stroke="#c4c6cc" stroke-dasharray="2,2" stroke-width="0.75" x1="0" x2="600" y1="80" y2="80"></line>
+<line stroke="#c4c6cc" stroke-width="0.75" x1="0" x2="600" y1="110" y2="110"></line>
+<!-- Curva ano anterior 2023 -->
+<polyline fill="none" points="25,78 75,82 125,70 175,65 225,62 275,68 325,58 375,60 425,55 475,52 525,48 575,45" stroke="#74777d" stroke-dasharray="3,3" stroke-width="1.5"></polyline>
+<!-- Área e linha ano 2024 -->
+<polygon fill="#1e2d3d" fill-opacity="0.12" points="25,74 75,79 125,64 175,60 225,58 275,62 325,52 375,55 425,49 475,46 525,40 575,38 575,110 25,110"></polygon>
+<polyline fill="none" points="25,74 75,79 125,64 175,60 225,58 275,62 325,52 375,55 425,49 475,46 525,40 575,38" stroke="#1e2d3d" stroke-width="2"></polyline>
+<!-- Pontos de dados 2024 -->
+<circle cx="25" cy="74" fill="#1e2d3d" r="2.5"></circle>
+<circle cx="75" cy="79" fill="#1e2d3d" r="2.5"></circle>
+<circle cx="125" cy="64" fill="#1e2d3d" r="2.5"></circle>
+<circle cx="175" cy="60" fill="#1e2d3d" r="2.5"></circle>
+<circle cx="225" cy="58" fill="#1e2d3d" r="2.5"></circle>
+<circle cx="275" cy="62" fill="#1e2d3d" r="2.5"></circle>
+<circle cx="325" cy="52" fill="#1e2d3d" r="2.5"></circle>
+<circle cx="375" cy="55" fill="#1e2d3d" r="2.5"></circle>
+<circle cx="425" cy="49" fill="#1e2d3d" r="2.5"></circle>
+<circle cx="475" cy="46" fill="#1e2d3d" r="2.5"></circle>
+<circle cx="525" cy="40" fill="#ff8340" r="2.5"></circle>
+<circle cx="575" cy="38" fill="#ff8340" r="3"></circle>
+</svg>
+</div>
+<!-- Eixo X Meses -->
+<div class="flex justify-between px-1 text-on-surface-variant font-label-caps text-label-caps">
+<span>JAN</span><span>FEV</span><span>MAR</span><span>ABR</span><span>MAI</span><span>JUN</span><span>JUL</span><span>AGO</span><span>SET</span><span>OUT</span><span>NOV</span><span>DEZ</span>
+</div>
+</div>
+<!-- Distribuição por dia da semana -->
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Incidência por Dia da Semana (Concentração Fim de Semana)</span>
+<span class="font-body-sm text-body-sm text-secondary font-semibold">51.2% Ocorrem Sex-Dom</span>
+</div>
+<div class="grid grid-cols-7 gap-1 font-body-sm text-body-sm">
+<div class="bg-surface-container-high p-1 text-center rounded">
+<div class="font-label-caps text-label-caps text-on-surface-variant">SEG</div>
+<div class="h-12 flex items-end justify-center py-1">
+<div class="w-full bg-surface-tint" style="height: 48%;"></div>
+</div>
+<div class="font-label-numeric text-label-numeric text-on-surface">11.8%</div>
+</div>
+<div class="bg-surface-container-high p-1 text-center rounded">
+<div class="font-label-caps text-label-caps text-on-surface-variant">TER</div>
+<div class="h-12 flex items-end justify-center py-1">
+<div class="w-full bg-surface-tint" style="height: 42%;"></div>
+</div>
+<div class="font-label-numeric text-label-numeric text-on-surface">10.4%</div>
+</div>
+<div class="bg-surface-container-high p-1 text-center rounded">
+<div class="font-label-caps text-label-caps text-on-surface-variant">QUA</div>
+<div class="h-12 flex items-end justify-center py-1">
+<div class="w-full bg-surface-tint" style="height: 44%;"></div>
+</div>
+<div class="font-label-numeric text-label-numeric text-on-surface">11.1%</div>
+</div>
+<div class="bg-surface-container-high p-1 text-center rounded">
+<div class="font-label-caps text-label-caps text-on-surface-variant">QUI</div>
+<div class="h-12 flex items-end justify-center py-1">
+<div class="w-full bg-surface-tint" style="height: 52%;"></div>
+</div>
+<div class="font-label-numeric text-label-numeric text-on-surface">12.5%</div>
+</div>
+<div class="bg-surface-container-high p-1 text-center rounded">
+<div class="font-label-caps text-label-caps text-primary font-bold">SEX</div>
+<div class="h-12 flex items-end justify-center py-1">
+<div class="w-full bg-primary-container" style="height: 72%;"></div>
+</div>
+<div class="font-label-numeric text-label-numeric text-primary font-bold">16.3%</div>
+</div>
+<div class="bg-surface-container-high p-1 text-center rounded">
+<div class="font-label-caps text-label-caps text-secondary font-bold">SÁB</div>
+<div class="h-12 flex items-end justify-center py-1">
+<div class="w-full bg-secondary-container" style="height: 84%;"></div>
+</div>
+<div class="font-label-numeric text-label-numeric text-secondary font-bold">17.8%</div>
+</div>
+<div class="bg-surface-container-high p-1 text-center rounded">
+<div class="font-label-caps text-label-caps text-secondary font-bold">DOM</div>
+<div class="h-12 flex items-end justify-center py-1">
+<div class="w-full bg-secondary" style="height: 80%;"></div>
+</div>
+<div class="font-label-numeric text-label-numeric text-secondary font-bold">17.1%</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Painel Direito: Causas Prováveis + Tipologia de Sinistro (Col 5) -->
+<div class="lg:col-span-5 bg-surface-container-lowest p-space-md rounded flex flex-col gap-space-md">
+<!-- Causas Prováveis (Barras Horizontais) -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between pb-space-xs bg-surface-container-high px-space-sm py-1 rounded">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">bar_chart</span>
+<span class="font-label-caps text-label-caps uppercase text-primary tracking-wider">Causas Principais Declaradas (PRF)</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">TOP 5</span>
+</div>
+<div class="flex flex-col gap-2 pt-1 font-body-sm text-body-sm">
+<!-- Causa 1 -->
+<div>
+<div class="flex justify-between items-baseline mb-0.5">
+<span class="text-on-surface font-medium">Reação tardia ou ineficiente do condutor</span>
+<span class="font-label-numeric text-label-numeric text-primary font-semibold">23.8% (15.425)</span>
+</div>
+<div class="w-full h-2 bg-surface-container-high rounded overflow-hidden">
+<div class="h-full bg-primary-container" style="width: 78%;"></div>
+</div>
+</div>
+<!-- Causa 2 -->
+<div>
+<div class="flex justify-between items-baseline mb-0.5">
+<span class="text-on-surface font-medium">Velocidade incompatível com o trecho</span>
+<span class="font-label-numeric text-label-numeric text-secondary font-semibold">18.4% (11.925)</span>
+</div>
+<div class="w-full h-2 bg-surface-container-high rounded overflow-hidden">
+<div class="h-full bg-secondary-container" style="width: 61%;"></div>
+</div>
+</div>
+<!-- Causa 3 -->
+<div>
+<div class="flex justify-between items-baseline mb-0.5">
+<span class="text-on-surface font-medium">Desobediência à sinalização / Preferencial</span>
+<span class="font-label-numeric text-label-numeric text-primary font-semibold">14.1% (9.138)</span>
+</div>
+<div class="w-full h-2 bg-surface-container-high rounded overflow-hidden">
+<div class="h-full bg-surface-tint" style="width: 47%;"></div>
+</div>
+</div>
+<!-- Causa 4 -->
+<div>
+<div class="flex justify-between items-baseline mb-0.5">
+<span class="text-on-surface font-medium">Ingestão de álcool pelo condutor</span>
+<span class="font-label-numeric text-label-numeric text-secondary font-semibold">9.7% (6.286)</span>
+</div>
+<div class="w-full h-2 bg-surface-container-high rounded overflow-hidden">
+<div class="h-full bg-secondary" style="width: 32%;"></div>
+</div>
+</div>
+<!-- Causa 5 -->
+<div>
+<div class="flex justify-between items-baseline mb-0.5">
+<span class="text-on-surface font-medium">Defeito mecânico / Pneu furado</span>
+<span class="font-label-numeric text-label-numeric text-primary font-semibold">6.2% (4.018)</span>
+</div>
+<div class="w-full h-2 bg-surface-container-high rounded overflow-hidden">
+<div class="h-full bg-outline" style="width: 21%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Classificação por Tipo de Acidente -->
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<div class="flex items-center justify-between pb-space-xs bg-surface-container-high px-space-sm py-1 rounded">
+<span class="font-label-caps text-label-caps uppercase text-primary tracking-wider">Tipologia do Sinistro</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Participação %</span>
+</div>
+<div class="grid grid-cols-2 gap-space-xs font-body-sm text-body-sm">
+<div class="bg-surface-container-high p-2 rounded flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant">COLISÃO TRASEIRA</span>
+<div class="flex items-baseline justify-between mt-1">
+<span class="font-title-sm text-title-sm text-primary">28.4%</span>
+<span class="font-label-numeric text-label-numeric text-outline">18.406 reg</span>
+</div>
+</div>
+<div class="bg-surface-container-high p-2 rounded flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-secondary">COLISÃO FRONTAL</span>
+<div class="flex items-baseline justify-between mt-1">
+<span class="font-title-sm text-title-sm text-secondary">19.2%</span>
+<span class="font-label-numeric text-label-numeric text-secondary-container">Maior letalidade</span>
+</div>
+</div>
+<div class="bg-surface-container-high p-2 rounded flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant">SAÍDA DE LEITO</span>
+<div class="flex items-baseline justify-between mt-1">
+<span class="font-title-sm text-title-sm text-primary">17.5%</span>
+<span class="font-label-numeric text-label-numeric text-outline">11.342 reg</span>
+</div>
+</div>
+<div class="bg-surface-container-high p-2 rounded flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant">TOMBAMENTO / ATROPEL.</span>
+<div class="flex items-baseline justify-between mt-1">
+<span class="font-title-sm text-title-sm text-primary">14.1%</span>
+<span class="font-label-numeric text-label-numeric text-outline">9.138 reg</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. Tabela Técnica de Ocorrências Recentes e Detalhadas -->
+<section class="w-full px-gutter pb-space-xl">
+<div class="bg-surface-container-lowest p-space-md rounded flex flex-col gap-space-sm">
+<!-- Cabeçalho da Tabela e Botões de Exportação -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-sm pb-space-sm bg-surface-container-high px-space-sm py-2 rounded">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">table_chart</span>
+<div>
+<h2 class="font-title-sm text-title-sm text-primary">Registros Detalhados de Ocorrências Homologadas</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Consulta técnica e auditável da malha rodoviária federal sob supervisão da PRF</p>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="h-8 px-space-sm bg-surface-container-highest text-primary font-label-caps text-label-caps uppercase rounded hover:bg-surface-variant transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+<span>Exportar CSV</span>
+</button>
+<button class="h-8 px-space-sm bg-surface-container-highest text-primary font-label-caps text-label-caps uppercase rounded hover:bg-surface-variant transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">data_object</span>
+<span>JSON API</span>
+</button>
+<button class="h-8 px-space-sm bg-primary-container text-on-primary font-label-caps text-label-caps uppercase rounded hover:bg-primary transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">print</span>
+<span>Imprimir Boletins</span>
+</button>
+</div>
+</div>
+<!-- Tabela com Layout de Dados Estrito -->
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse font-body-sm text-body-sm">
+<thead>
+<tr class="bg-surface-container-high text-primary font-label-caps text-label-caps uppercase tracking-wider">
+<th class="py-2 px-space-sm">Protocolo PRF</th>
+<th class="py-2 px-space-sm">Data / Hora</th>
+<th class="py-2 px-space-sm">UF</th>
+<th class="py-2 px-space-sm">Rodovia / KM</th>
+<th class="py-2 px-space-sm">Município</th>
+<th class="py-2 px-space-sm">Tipo de Acidente</th>
+<th class="py-2 px-space-sm">Severidade</th>
+<th class="py-2 px-space-sm">Pista</th>
+<th class="py-2 px-space-sm">Meteorologia</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high text-on-surface">
+<!-- Linha 1 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-2 px-space-sm font-label-numeric text-label-numeric font-medium text-primary">2024.10.88412</td>
+<td class="py-2 px-space-sm font-label-numeric text-label-numeric">14/10/2024 22:40</td>
+<td class="py-2 px-space-sm font-label-caps text-label-caps">MG</td>
+<td class="py-2 px-space-sm"><span class="bg-primary-container text-on-primary px-1.5 py-0.5 rounded font-label-numeric text-label-numeric">BR-381 KM 492.2</span></td>
+<td class="py-2 px-space-sm">Betim</td>
+<td class="py-2 px-space-sm">Colisão traseira c/ engavetamento</td>
+<td class="py-2 px-space-sm"><span class="text-secondary bg-error-container/30 px-1.5 py-0.5 rounded font-label-caps text-label-caps uppercase">1 Fatal / 2 Graves</span></td>
+<td class="py-2 px-space-sm">Dupla</td>
+<td class="py-2 px-space-sm flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-outline">rainy</span> Chuva</td>
+</tr>
+<!-- Linha 2 -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="py-2 px-space-sm font-label-numeric text-label-numeric font-medium text-primary">2024.10.88405</td>
+<td class="py-2 px-space-sm font-label-numeric text-label-numeric">14/10/2024 19:15</td>
+<td class="py-2 px-space-sm font-label-caps text-label-caps">SC</td>
+<td class="py-2 px-space-sm"><span class="bg-primary-container text-on-primary px-1.5 py-0.5 rounded font-label-numeric text-label-numeric">BR-101 KM 136.0</span></td>
+<td class="py-2 px-space-sm">Balneário Camboriú</td>
+<td class="py-2 px-space-sm">Tombamento de veículo de carga</td>
+<td class="py-2 px-space-sm"><span class="text-on-surface-variant bg-surface-container-high px-1.5 py-0.5 rounded font-label-caps text-label-caps uppercase">Sem Vítimas</span></td>
+<td class="py-2 px-space-sm">Múltipla</td>
+<td class="py-2 px-space-sm flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-outline">wb_sunny</span> Céu Claro</td>
+</tr>
+<!-- Linha 3 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-2 px-space-sm font-label-numeric text-label-numeric font-medium text-primary">2024.10.88398</td>
+<td class="py-2 px-space-sm font-label-numeric text-label-numeric">14/10/2024 18:02</td>
+<td class="py-2 px-space-sm font-label-caps text-label-caps">PR</td>
+<td class="py-2 px-space-sm"><span class="bg-primary-container text-on-primary px-1.5 py-0.5 rounded font-label-numeric text-label-numeric">BR-277 KM 312.8</span></td>
+<td class="py-2 px-space-sm">Guarapuava</td>
+<td class="py-2 px-space-sm">Colisão frontal</td>
+<td class="py-2 px-space-sm"><span class="text-secondary bg-error-container/30 px-1.5 py-0.5 rounded font-label-caps text-label-caps uppercase">2 Fatais / 1 Leve</span></td>
+<td class="py-2 px-space-sm">Simples</td>
+<td class="py-2 px-space-sm flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-outline">foggy</span> Nevoeiro</td>
+</tr>
+<!-- Linha 4 -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="py-2 px-space-sm font-label-numeric text-label-numeric font-medium text-primary">2024.10.88371</td>
+<td class="py-2 px-space-sm font-label-numeric text-label-numeric">14/10/2024 14:30</td>
+<td class="py-2 px-space-sm font-label-caps text-label-caps">SP</td>
+<td class="py-2 px-space-sm"><span class="bg-primary-container text-on-primary px-1.5 py-0.5 rounded font-label-numeric text-label-numeric">BR-116 KM 218.4</span></td>
+<td class="py-2 px-space-sm">Guarulhos</td>
+<td class="py-2 px-space-sm">Colisão lateral no mesmo sentido</td>
+<td class="py-2 px-space-sm"><span class="text-secondary-container bg-surface-container-high px-1.5 py-0.5 rounded font-label-caps text-label-caps uppercase">2 Feridos Leves</span></td>
+<td class="py-2 px-space-sm">Múltipla</td>
+<td class="py-2 px-space-sm flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-outline">wb_sunny</span> Céu Claro</td>
+</tr>
+<!-- Linha 5 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-2 px-space-sm font-label-numeric text-label-numeric font-medium text-primary">2024.10.88354</td>
+<td class="py-2 px-space-sm font-label-numeric text-label-numeric">14/10/2024 11:20</td>
+<td class="py-2 px-space-sm font-label-caps text-label-caps">BA</td>
+<td class="py-2 px-space-sm"><span class="bg-primary-container text-on-primary px-1.5 py-0.5 rounded font-label-numeric text-label-numeric">BR-101 KM 680.1</span></td>
+<td class="py-2 px-space-sm">Eunápolis</td>
+<td class="py-2 px-space-sm">Saída de leito carroçável</td>
+<td class="py-2 px-space-sm"><span class="text-secondary-container bg-surface-container-high px-1.5 py-0.5 rounded font-label-caps text-label-caps uppercase">1 Ferido Grave</span></td>
+<td class="py-2 px-space-sm">Simples</td>
+<td class="py-2 px-space-sm flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-outline">cloud</span> Nublado</td>
+</tr>
+<!-- Linha 6 -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="py-2 px-space-sm font-label-numeric text-label-numeric font-medium text-primary">2024.10.88339</td>
+<td class="py-2 px-space-sm font-label-numeric text-label-numeric">14/10/2024 09:45</td>
+<td class="py-2 px-space-sm font-label-caps text-label-caps">RJ</td>
+<td class="py-2 px-space-sm"><span class="bg-primary-container text-on-primary px-1.5 py-0.5 rounded font-label-numeric text-label-numeric">BR-040 KM 118.0</span></td>
+<td class="py-2 px-space-sm">Duque de Caxias</td>
+<td class="py-2 px-space-sm">Atropelamento de pedestre</td>
+<td class="py-2 px-space-sm"><span class="text-secondary bg-error-container/30 px-1.5 py-0.5 rounded font-label-caps text-label-caps uppercase">1 Fatal</span></td>
+<td class="py-2 px-space-sm">Dupla</td>
+<td class="py-2 px-space-sm flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-outline">wb_sunny</span> Céu Claro</td>
+</tr>
+<!-- Linha 7 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-2 px-space-sm font-label-numeric text-label-numeric font-medium text-primary">2024.10.88310</td>
+<td class="py-2 px-space-sm font-label-numeric text-label-numeric">14/10/2024 06:10</td>
+<td class="py-2 px-space-sm font-label-caps text-label-caps">GO</td>
+<td class="py-2 px-space-sm"><span class="bg-primary-container text-on-primary px-1.5 py-0.5 rounded font-label-numeric text-label-numeric">BR-153 KM 498.7</span></td>
+<td class="py-2 px-space-sm">Aparecida de Goiânia</td>
+<td class="py-2 px-space-sm">Colisão transversal em retorno</td>
+<td class="py-2 px-space-sm"><span class="text-on-surface-variant bg-surface-container-high px-1.5 py-0.5 rounded font-label-caps text-label-caps uppercase">Sem Vítimas</span></td>
+<td class="py-2 px-space-sm">Dupla</td>
+<td class="py-2 px-space-sm flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-outline">wb_sunny</span> Céu Claro</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Paginação Compacta e Metadados Técnicos -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm pt-space-xs bg-surface-container-high px-space-sm py-1 rounded font-body-sm text-body-sm">
+<div class="text-on-surface-variant">
+          Exibindo <span class="font-label-numeric text-label-numeric font-semibold text-primary">1 - 7</span> de <span class="font-label-numeric text-label-numeric font-semibold text-primary">64.812</span> ocorrências homologadas
+        </div>
+<div class="flex items-center gap-space-xs">
+<button class="h-7 px-2 bg-surface-container-lowest text-on-surface font-label-numeric text-label-numeric rounded hover:bg-surface-container transition-colors disabled:opacity-40" disabled="">
+            Anterior
+          </button>
+<span class="px-2 font-label-numeric text-label-numeric bg-primary text-on-primary rounded h-7 flex items-center justify-center">1</span>
+<button class="h-7 px-2 bg-surface-container-lowest text-on-surface font-label-numeric text-label-numeric rounded hover:bg-surface-container transition-colors">2</button>
+<button class="h-7 px-2 bg-surface-container-lowest text-on-surface font-label-numeric text-label-numeric rounded hover:bg-surface-container transition-colors">3</button>
+<span class="px-1 text-outline">...</span>
+<button class="h-7 px-2 bg-surface-container-lowest text-on-surface font-label-numeric text-label-numeric rounded hover:bg-surface-container transition-colors">9.259</button>
+<button class="h-7 px-2 bg-surface-container-lowest text-on-surface font-label-numeric text-label-numeric rounded hover:bg-surface-container transition-colors">
+            Próxima
+          </button>
+</div>
+</div>
+</div>
+</section>
+</div>
+<script>
+  // Micro-interatividade de filtros
+  document.getElementById('filter-form')?.addEventListener('reset', () => {
+    console.info('PRF Analytics: Filtros reiniciados para o estado padrão nacional 2024.');
+  });
+</script></main><footer class="w-full bg-tertiary text-on-tertiary-container border-t border-tertiary-container py-space-lg"><div class="w-full px-gutter flex flex-col md:flex-row items-center justify-between gap-space-md font-body-sm text-body-sm"><div class="flex items-center gap-space-sm"><span class="font-label-caps text-label-caps text-on-tertiary uppercase">Governo Federal | Ministério da Justiça e Segurança Pública</span><span class="text-outline-variant">•</span><span>Polícia Rodoviária Federal</span></div><div class="flex items-center gap-space-lg"><span class="font-label-numeric text-label-numeric">Portaria nº 143/2021 — Dados Abertos e Transparência Pública Ativa</span><span class="text-outline-variant">•</span><span>Versão Sistema: 3.14.2</span></div></div></footer></body></html>

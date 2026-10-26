@@ -2,14 +2,19 @@ import { el, elemento } from "./dom.js";
 import { formatarData, formatarNumero } from "./formato.js";
 import type { Acidente } from "./tipos.js";
 
-export function renderizarDetalhe(a: Acidente | null, aoEditar: (acidente: Acidente) => void): void {
-  const alvo = el("detalhe-registro");
-  if (!a) {
-    alvo.hidden = true;
-    alvo.replaceChildren();
-    return;
-  }
+let registroAtual: Acidente | null = null;
 
+export function registroEmDetalhe(): Acidente | null {
+  return registroAtual;
+}
+
+export function fecharDetalhe(): void {
+  registroAtual = null;
+  el<HTMLDialogElement>("dialogo-detalhe").close();
+}
+
+export function mostrarDetalhe(a: Acidente): void {
+  registroAtual = a;
   const itens: [string, string][] = [
     ["ID", String(a.id)],
     ["ID PRF", a.idPrf ? String(a.idPrf) : "cadastro manual"],
@@ -19,16 +24,13 @@ export function renderizarDetalhe(a: Acidente | null, aoEditar: (acidente: Acide
     ["Causa", a.causaAcidente],
     ["Tipo", a.tipoAcidente],
     ["Classificação", a.classificacao],
-    ["Vítimas", `${a.mortos} mortos, ${a.feridos} feridos`],
+    ["Vítimas", `${a.mortos} ${a.mortos === 1 ? "morto" : "mortos"}, ${a.feridos} ${a.feridos === 1 ? "ferido" : "feridos"}`],
     ["Coordenadas", `${a.latitude}, ${a.longitude}`],
   ];
-  const lista = elemento("dl");
+  const lista = elemento("dl", undefined, "detalhe-lista");
   for (const [rotulo, valor] of itens) lista.append(elemento("dt", rotulo), elemento("dd", valor));
 
-  const editar = elemento("button", "Editar este registro", "secundario");
-  editar.type = "button";
-  editar.addEventListener("click", () => aoEditar(a));
-
-  alvo.replaceChildren(elemento("h3", `Registro #${a.id}`), lista, editar);
-  alvo.hidden = false;
+  el("titulo-detalhe").textContent = `Registro #${a.id}`;
+  el("detalhe-registro").replaceChildren(lista);
+  el<HTMLDialogElement>("dialogo-detalhe").showModal();
 }

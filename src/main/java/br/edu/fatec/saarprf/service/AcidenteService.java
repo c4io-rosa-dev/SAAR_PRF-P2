@@ -2,8 +2,11 @@ package br.edu.fatec.saarprf.service;
 
 import br.edu.fatec.saarprf.dto.ContagemCausa;
 import br.edu.fatec.saarprf.dto.ContagemMensal;
+import br.edu.fatec.saarprf.dto.ContagemRodovia;
 import br.edu.fatec.saarprf.dto.FiltroAcidente;
 import br.edu.fatec.saarprf.dto.PaginaResposta;
+import br.edu.fatec.saarprf.dto.ResumoAcidentes;
+import br.edu.fatec.saarprf.dto.TotaisAcidentes;
 import br.edu.fatec.saarprf.model.Acidente;
 import br.edu.fatec.saarprf.repository.AcidenteRepository;
 import org.springframework.data.domain.PageRequest;
@@ -77,6 +80,19 @@ public class AcidenteService {
     public List<ContagemMensal> evolucaoMensal(FiltroAcidente filtro) {
         return repository.contarPorMes(filtro.uf(), filtro.classificacao(),
                 filtro.dataInicio(), filtro.dataFim());
+    }
+
+    // indicadores dos cards: totais do recorte + a rodovia com mais ocorrências
+    public ResumoAcidentes resumo(FiltroAcidente filtro) {
+        TotaisAcidentes totais = repository.totalizar(filtro.uf(), filtro.classificacao(),
+                filtro.dataInicio(), filtro.dataFim());
+        List<ContagemRodovia> rodovias = repository.contarPorRodovia(filtro.uf(), filtro.classificacao(),
+                filtro.dataInicio(), filtro.dataFim(), PageRequest.of(0, 1));
+        ContagemRodovia maisCritica = rodovias.isEmpty() ? null : rodovias.getFirst();
+        return new ResumoAcidentes(totais.total(), totais.mortos(), totais.feridos(),
+                totais.dataInicial(), totais.dataFinal(),
+                maisCritica == null ? null : maisCritica.rodovia(),
+                maisCritica == null ? 0 : maisCritica.total());
     }
 
     private Pageable paginacao(int pagina, int tamanho) {

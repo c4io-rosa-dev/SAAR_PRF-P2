@@ -1,6 +1,6 @@
 import type {
   Acidente, AcidenteEntrada, ContagemCausa, ContagemMensal, ErroResposta, Filtro, PaginaResposta,
-  ResultadoImportacao,
+  ResultadoImportacao, ResumoAcidentes,
 } from "./tipos.js";
 
 const BASE = "/api/acidentes";
@@ -71,4 +71,6 @@ export const api = {
   topCausas: (filtro: Filtro) => requisitar<ContagemCausa[]>(`${BASE}/estatisticas/causas?${parametros(filtro)}`),
 
   mensal: (filtro: Filtro) => requisitar<ContagemMensal[]>(`${BASE}/estatisticas/mensal?${parametros(filtro)}`),
+
+  resumo: (filtro: Filtro) => requisitar<ResumoAcidentes>(`${BASE}/estatisticas/resumo?${parametros(filtro)}`),
 };

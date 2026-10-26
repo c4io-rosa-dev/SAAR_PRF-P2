@@ -21,6 +21,13 @@ function limparErros() {
         c.title = "";
     }
 }
+function dialogo() {
+    return el("dialogo-formulario");
+}
+export function abrirNovoRegistro() {
+    limparFormulario();
+    dialogo().showModal();
+}
 export function preencherFormulario(a) {
     limparErros();
     el("campo-id").value = String(a.id);
@@ -38,7 +45,7 @@ export function preencherFormulario(a) {
     campo("latitude").value = String(a.latitude);
     campo("longitude").value = String(a.longitude);
     el("titulo-form").textContent = `Editar registro #${a.id}`;
-    el("secao-formulario").scrollIntoView({ behavior: "smooth" });
+    dialogo().showModal();
 }
 export function lerFormulario() {
     const id = el("campo-id").value;
@@ -65,8 +72,12 @@ export function lerFormulario() {
 export function limparFormulario() {
     el("form-acidente").reset();
     el("campo-id").value = "";
-    el("titulo-form").textContent = "Cadastrar acidente";
+    el("titulo-form").textContent = "Novo registro";
     limparErros();
+}
+export function fecharFormulario() {
+    limparFormulario();
+    dialogo().close();
 }
 export function marcarErros(erros) {
     limparErros();

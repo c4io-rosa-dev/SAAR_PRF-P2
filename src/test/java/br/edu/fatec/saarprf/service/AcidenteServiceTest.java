@@ -1,6 +1,10 @@
 package br.edu.fatec.saarprf.service;
 
 import br.edu.fatec.saarprf.AcidenteFixture;
+import br.edu.fatec.saarprf.dto.ContagemRodovia;
+import br.edu.fatec.saarprf.dto.FiltroAcidente;
+import br.edu.fatec.saarprf.dto.ResumoAcidentes;
+import br.edu.fatec.saarprf.dto.TotaisAcidentes;
 import br.edu.fatec.saarprf.model.Acidente;
 import br.edu.fatec.saarprf.repository.AcidenteRepository;
 import org.junit.jupiter.api.Test;
@@ -9,11 +13,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -83,5 +91,33 @@ class AcidenteServiceTest {
 
         assertThat(service.excluir(1L)).isTrue();
         verify(repository).deleteById(1L);
+    }
+
+    @Test
+    void resumoJuntaTotaisERodoviaMaisCritica() {
+        FiltroAcidente filtro = new FiltroAcidente("SP", null, null, null);
+        when(repository.totalizar(eq("SP"), isNull(), isNull(), isNull()))
+                .thenReturn(new TotaisAcidentes(120L, 9L, 150L, LocalDate.of(2025, 1, 1), LocalDate.of(2026, 8, 31)));
+        when(repository.contarPorRodovia(eq("SP"), isNull(), isNull(), isNull(), any()))
+                .thenReturn(List.of(new ContagemRodovia("BR-116", 40L)));
+
+        ResumoAcidentes resumo = service.resumo(filtro);
+
+        assertThat(resumo).isEqualTo(new ResumoAcidentes(120L, 9L, 150L,
+                LocalDate.of(2025, 1, 1), LocalDate.of(2026, 8, 31), "BR-116", 40L));
+    }
+
+    @Test
+    void resumoSemRegistrosNaoTemRodoviaCritica() {
+        FiltroAcidente filtro = new FiltroAcidente(null, null, null, null);
+        when(repository.totalizar(isNull(), isNull(), isNull(), isNull()))
+                .thenReturn(new TotaisAcidentes(0L, 0L, 0L, null, null));
+        when(repository.contarPorRodovia(isNull(), isNull(), isNull(), isNull(), any())).thenReturn(List.of());
+
+        ResumoAcidentes resumo = service.resumo(filtro);
+
+        assertThat(resumo.total()).isZero();
+        assertThat(resumo.rodoviaMaisCritica()).isNull();
+        assertThat(resumo.ocorrenciasRodovia()).isZero();
     }
 }

@@ -44,7 +44,7 @@ O `.env` está no `.gitignore` e nunca deve ser enviado ao GitHub. O `applicatio
 ./mvnw spring-boot:run
 ```
 
-Acesse http://localhost:8080. A tabela `acidente` é criada automaticamente na primeira execução.
+Acesse http://localhost:8080 (página inicial) ou http://localhost:8080/painel.html (painel analítico). A tabela `acidente` é criada automaticamente na primeira execução.
 
 - Testes: `./mvnw test`
 - Front-end: `npm install` e `npm run build` (ou `npm run watch`)
@@ -58,7 +58,7 @@ Acesse http://localhost:8080. A tabela `acidente` é criada automaticamente na p
 | Service | `service` | `AcidenteService` (CRUD, filtro, estatísticas), `ImportacaoService` e `ConversorLinhaCsv` (importação e tratamento) |
 | Controller | `controller` | `AcidenteController` (endpoints REST com `ResponseEntity`) |
 | Erros | `exception` | `TratadorErros` converte erros de validação e importação em HTTP 400 legível |
-| View | `static/` | `index.html`, `css/style.css`, `js/` (compilado de `src/main/frontend/ts`) |
+| View | `static/` | `index.html` (página inicial), `painel.html` (painel com CRUD, filtros, importação e gráficos), `css/style.css`, `js/` (compilado de `src/main/frontend/ts`), `fonts/` e `img/` |
 
 ## Endpoints
 
@@ -73,6 +73,7 @@ Acesse http://localhost:8080. A tabela `acidente` é criada automaticamente na p
 | GET | `/api/acidentes/filtro?uf=&classificacao=&dataInicio=&dataFim=` | Filtrar (critérios combináveis) | 200 |
 | GET | `/api/acidentes/estatisticas/causas?(filtros)` | Top 10 causas | 200 |
 | GET | `/api/acidentes/estatisticas/mensal?(filtros)` | Total por ano e mês | 200 |
+| GET | `/api/acidentes/estatisticas/resumo?(filtros)` | Indicadores dos cards: total, óbitos, feridos, período e rodovia mais crítica | 200 |
 
 Exemplo de cadastro (`POST /api/acidentes`):
 

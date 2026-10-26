@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel analítico — SAAR PRF</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/lib/chart.umd.js"></script>
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+<header class="topo">
+  <a class="marca" href="./" title="Voltar para a página inicial">
+    <span class="selo"><span class="icone">shield</span>PRF</span>
+    <div class="marca-texto">
+      <strong>SAAR PRF</strong>
+      <span>Sistema de Análise de Acidentes Rodoviários</span>
+    </div>
+  </a>
+  <div class="chip-base"><span class="icone">calendar_today</span>Base: Dados Abertos PRF · 2025–2026</div>
+  <div class="topo-acoes">
+    <button type="button" id="btn-abrir-importacao" class="botao botao-contorno"><span class="icone">upload_file</span>Importar CSV</button>
+    <button type="button" id="btn-novo" class="botao botao-destaque"><span class="icone">add</span>Novo registro</button>
+  </div>
+</header>
+
+<div class="subtopo">
+  <span class="subtopo-titulo"><span class="ponto"></span>Painel operacional</span>
+  <span class="subtopo-texto">Acidentes em rodovias federais · agrupados por ocorrência</span>
+  <span class="subtopo-contador"><span class="icone">database</span>Registros: <strong id="contador">—</strong></span>
+</div>
+
+<main>
+  <section class="painel" id="secao-filtros">
+    <div class="painel-cabecalho">
+      <h2><span class="icone">tune</span>Parâmetros de filtragem e recorte</h2>
+      <span class="painel-info">Critérios ativos: <strong id="criterios-ativos">todos os registros</strong></span>
+    </div>
+    <div class="filtros">
+      <label>UF (jurisdição)<select id="filtro-uf"><option value="">Todas as UFs</option></select></label>
+      <label>Classificação<select id="filtro-classificacao"><option value="">Todas as classificações</option></select></label>
+      <label>Data inicial<input type="date" id="filtro-inicio"></label>
+      <label>Data final<input type="date" id="filtro-fim"></label>
+      <button type="button" id="btn-filtrar" class="botao botao-destaque"><span class="icone">filter_alt</span>Aplicar</button>
+      <button type="button" id="btn-limpar-filtros" class="botao botao-icone" title="Limpar filtros" aria-label="Limpar filtros"><span class="icone">restart_alt</span></button>
+    </div>
+    <div class="busca">
+      <label>Buscar por ID<input type="number" id="busca-id" min="1" placeholder="Ex.: 85025"></label>
+      <button type="button" id="btn-buscar" class="botao botao-contorno"><span class="icone">search</span>Buscar</button>
+    </div>
+  </section>
+
+  <section class="kpis">
+    <article class="kpi kpi-ciano">
+      <div class="kpi-cabecalho"><div><h3>Total de ocorrências</h3><p>Acidentes no recorte</p></div><span class="icone">traffic</span></div>
+      <div class="kpi-valor"><strong id="kpi-total-valor">—</strong><span>acidentes</span></div>
+      <div class="kpi-rodape" id="kpi-total-rodape">—</div>
+    </article>
+    <article class="kpi kpi-vermelho">
+      <div class="kpi-cabecalho"><div><h3>Óbitos registrados</h3><p>Vítimas fatais no local</p></div><span class="icone">warning</span></div>
+      <div class="kpi-valor"><strong id="kpi-mortos-valor">—</strong><span>óbitos</span></div>
+      <div class="kpi-rodape" id="kpi-mortos-rodape">—</div>
+    </article>
+    <article class="kpi kpi-ambar">
+      <div class="kpi-cabecalho"><div><h3>Pessoas feridas</h3><p>Graves e leves</p></div><span class="icone">medical_services</span></div>
+      <div class="kpi-valor"><strong id="kpi-feridos-valor">—</strong><span>pessoas</span></div>
+      <div class="kpi-rodape" id="kpi-feridos-rodape">—</div>
+    </article>
+    <article class="kpi kpi-laranja">
+      <div class="kpi-cabecalho"><div><h3>Rodovia mais crítica</h3><p>Maior concentração de acidentes</p></div><span class="icone">alt_route</span></div>
+      <div class="kpi-valor"><strong id="kpi-rodovia-valor">—</strong><span id="kpi-rodovia-pct"></span></div>
+      <div class="kpi-rodape" id="kpi-rodovia-rodape">—</div>
+    </article>
+  </section>
+
+  <section class="graficos">
+    <article class="painel">
+      <div class="painel-cabecalho">
+        <h2><span class="icone">trending_up</span>Evolução mensal de acidentes</h2>
+        <span class="painel-info" id="legenda-mensal"></span>
+      </div>
+      <div class="grafico-sub">
+        <span>Acidentes por mês</span>
+        <span>Média mensal: <strong id="media-mensal">—</strong></span>
+      </div>
+      <div class="area-grafico"><canvas id="grafico-mensal" aria-label="Gráfico de linhas com o total de acidentes por mês"></canvas></div>
+    </article>
+    <article class="painel">
+      <div class="painel-cabecalho">
+        <h2><span class="icone">bar_chart</span>Causas principais declaradas</h2>
+        <span class="painel-info">Top 10</span>
+      </div>
+      <ol id="grafico-causas" class="causas" aria-label="Ranking das causas de acidentes"></ol>
+    </article>
+  </section>
+
+  <section class="painel" id="secao-tabela">
+    <div class="painel-cabecalho">
+      <div>
+        <h2 class="titulo-grande"><span class="icone">table_view</span>Registros detalhados de ocorrências</h2>
+        <p class="painel-sub">Consulta e manutenção da base importada · clique no ID para ver o detalhe</p>
+      </div>
+    </div>
+    <div class="tabela-rolagem">
+      <table>
+        <thead>
+        <tr>
+          <th>ID</th><th>Data / hora</th><th>UF</th><th>Rodovia / km</th><th>Município</th>
+          <th>Tipo de acidente</th><th>Causa</th><th>Gravidade</th><th class="col-acoes">Ações</th>
+        </tr>
+        </thead>
+        <tbody id="corpo-tabela"></tbody>
+      </table>
+    </div>
+    <div class="paginacao">
+      <span id="pag-resumo"></span>
+      <div class="paginacao-botoes">
+        <button type="button" id="pag-anterior" class="botao botao-contorno"><span class="icone">chevron_left</span>Anterior</button>
+        <span id="pag-info"></span>
+        <button type="button" id="pag-proxima" class="botao botao-contorno">Próxima<span class="icone">chevron_right</span></button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <span><strong>SAAR PRF</strong> · Projeto acadêmico · FATEC Zona Leste · Programação Avançada Orientada a Objetos · Grupo 03</span>
+  <span>Fonte: Dados Abertos da Polícia Rodoviária Federal · CC BY-ND 3.0</span>
+</footer>
+
+<dialog id="dialogo-importacao" class="dialogo">
+  <div class="dialogo-cabecalho">
+    <h2><span class="icone">upload_file</span>Importar arquivo CSV</h2>
+    <button type="button" class="botao botao-icone" data-fechar aria-label="Fechar"><span class="icone">close</span></button>
+  </div>
+  <div class="dialogo-corpo">
+    <p class="dialogo-texto">Arquivo oficial da PRF (acidentes agrupados por ocorrência), em ISO-8859-1 e separado por ponto e vírgula. Linhas inválidas são rejeitadas com o motivo; registros já importados são contados como duplicados.</p>
+    <div class="linha-arquivo">
+      <input type="file" id="arquivo" accept=".csv" autofocus>
+      <button type="button" id="btn-importar" class="botao botao-destaque"><span class="icone">upload_file</span>Importar</button>
+    </div>
+    <div id="resultado-importacao" class="resultado"></div>
+  </div>
+</dialog>
+
+<dialog id="dialogo-formulario" class="dialogo dialogo-largo">
+  <form id="form-acidente" novalidate>
+    <div class="dialogo-cabecalho">
+      <h2 id="titulo-form">Novo registro</h2>
+      <button type="button" class="botao botao-icone" data-fechar aria-label="Fechar"><span class="icone">close</span></button>
+    </div>
+    <div class="dialogo-corpo">
+      <input type="hidden" id="campo-id">
+      <div class="grade">
+        <label>Data<input type="date" id="campo-dataOcorrencia" autofocus></label>
+        <label>Horário<input type="time" id="campo-horario"></label>
+        <label>UF<select id="campo-uf"><option value="">Selecione</option></select></label>
+        <label>Município<input type="text" id="campo-municipio" maxlength="60"></label>
+        <label>Rodovia (BR)<input type="number" id="campo-rodovia" min="1" max="999" placeholder="Ex.: 116"></label>
+        <label>Quilômetro<input type="number" id="campo-quilometro" step="0.1" min="0"></label>
+        <label class="largo">Causa<input type="text" id="campo-causaAcidente" list="lista-causas" maxlength="120"></label>
+        <label>Tipo<input type="text" id="campo-tipoAcidente" list="lista-tipos" maxlength="60"></label>
+        <label>Classificação<select id="campo-classificacao"><option value="">Selecione</option></select></label>
+        <label>Mortos<input type="number" id="campo-mortos" min="0" value="0"></label>
+        <label>Feridos<input type="number" id="campo-feridos" min="0" value="0"></label>
+        <label>Latitude<input type="number" id="campo-latitude" step="any"></label>
+        <label>Longitude<input type="number" id="campo-longitude" step="any"></label>
+      </div>
+      <datalist id="lista-causas"></datalist>
+      <datalist id="lista-tipos"></datalist>
+    </div>
+    <div class="dialogo-rodape">
+      <button type="button" id="btn-cancelar" class="botao botao-contorno">Cancelar</button>
+      <button type="submit" id="btn-salvar" class="botao botao-destaque">Salvar</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dialogo-detalhe" class="dialogo">
+  <div class="dialogo-cabecalho">
+    <h2 id="titulo-detalhe">Registro</h2>
+    <button type="button" class="botao botao-icone" data-fechar aria-label="Fechar"><span class="icone">close</span></button>
+  </div>
+  <div class="dialogo-corpo" id="detalhe-registro"></div>
+  <div class="dialogo-rodape">
+    <button type="button" id="btn-editar-detalhe" class="botao botao-destaque" autofocus><span class="icone">edit</span>Editar este registro</button>
+  </div>
+</dialog>
+
+<div id="toasts" class="toasts" aria-live="polite"></div>
+</body>
+</html>

@@ -4,6 +4,7 @@ import br.edu.fatec.saarprf.dto.ContagemCausa;
 import br.edu.fatec.saarprf.dto.ContagemMensal;
 import br.edu.fatec.saarprf.dto.FiltroAcidente;
 import br.edu.fatec.saarprf.dto.PaginaResposta;
+import br.edu.fatec.saarprf.dto.ResumoAcidentes;
 import br.edu.fatec.saarprf.dto.ResultadoImportacao;
 import br.edu.fatec.saarprf.model.Acidente;
 import br.edu.fatec.saarprf.service.AcidenteService;
@@ -88,5 +89,10 @@ public class AcidenteController {
     @GetMapping("/estatisticas/mensal")
     public ResponseEntity<List<ContagemMensal>> evolucaoMensal(FiltroAcidente filtro) {
         return ResponseEntity.ok(service.evolucaoMensal(filtro));
+    }
+
+    @GetMapping("/estatisticas/resumo")
+    public ResponseEntity<ResumoAcidentes> resumo(FiltroAcidente filtro) {
+        return ResponseEntity.ok(service.resumo(filtro));
     }
 }

@@ -54,4 +54,5 @@ export const api = {
     },
     topCausas: (filtro) => requisitar(`${BASE}/estatisticas/causas?${parametros(filtro)}`),
     mensal: (filtro) => requisitar(`${BASE}/estatisticas/mensal?${parametros(filtro)}`),
+    resumo: (filtro) => requisitar(`${BASE}/estatisticas/resumo?${parametros(filtro)}`),
 };

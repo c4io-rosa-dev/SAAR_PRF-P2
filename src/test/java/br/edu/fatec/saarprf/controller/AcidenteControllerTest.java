@@ -4,6 +4,7 @@ import br.edu.fatec.saarprf.AcidenteFixture;
 import br.edu.fatec.saarprf.dto.FiltroAcidente;
 import br.edu.fatec.saarprf.dto.PaginaResposta;
 import br.edu.fatec.saarprf.dto.RejeicaoLinha;
+import br.edu.fatec.saarprf.dto.ResumoAcidentes;
 import br.edu.fatec.saarprf.dto.ResultadoImportacao;
 import br.edu.fatec.saarprf.exception.ImportacaoException;
 import br.edu.fatec.saarprf.model.Acidente;
@@ -187,5 +188,18 @@ class AcidenteControllerTest {
         mvc.perform(multipart("/api/acidentes/importar").file(arquivo))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.importadas").value(2));
+    }
+
+    @Test
+    void resumoRetornaTotaisDoFiltro() throws Exception {
+        when(service.resumo(eq(new FiltroAcidente("SP", null, null, null))))
+                .thenReturn(new ResumoAcidentes(120L, 9L, 150L, LocalDate.of(2025, 1, 1), LocalDate.of(2026, 8, 31), "BR-116", 40L));
+
+        mvc.perform(get("/api/acidentes/estatisticas/resumo").param("uf", "SP"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.total").value(120))
+                .andExpect(jsonPath("$.mortos").value(9))
+                .andExpect(jsonPath("$.rodoviaMaisCritica").value("BR-116"))
+                .andExpect(jsonPath("$.dataInicial").value("2025-01-01"));
     }
 }

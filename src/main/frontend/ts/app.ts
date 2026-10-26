@@ -1,11 +1,14 @@
 import { api, ApiErro } from "./api.js";
 import { CLASSIFICACOES, TIPOS_ACIDENTE, UFS } from "./constantes.js";
-import { renderizarDetalhe } from "./detalhe.js";
+import { fecharDetalhe, mostrarDetalhe, registroEmDetalhe } from "./detalhe.js";
 import { el, preencherOpcoes } from "./dom.js";
-import { formatarNumero } from "./formato.js";
-import { lerFormulario, limparFormulario, marcarErros, preencherFormulario } from "./formulario.js";
-import { desenharCausas, desenharMensal } from "./graficos.js";
+import { formatarData, formatarNumero } from "./formato.js";
+import {
+  abrirNovoRegistro, fecharFormulario, lerFormulario, limparFormulario, marcarErros, preencherFormulario,
+} from "./formulario.js";
+import { configurarGraficos, desenharCausas, desenharMensal } from "./graficos.js";
 import { mostrarErroImportacao, renderizarResultado } from "./importacao.js";
+import { renderizarKpis } from "./kpis.js";
 import { mensagemDeErro, mostrarMensagem } from "./mensagens.js";
 import { renderizarTabela } from "./tabela.js";
 import type { Acidente, Filtro } from "./tipos.js";
@@ -18,6 +21,18 @@ let filtro: Filtro = { ...FILTRO_VAZIO };
 
 const filtroAtivo = (): boolean => Object.values(filtro).some((valor) => valor !== "");
 
+function descreverFiltro(): string {
+  const partes: string[] = [];
+  if (filtro.uf) partes.push(`UF ${filtro.uf}`);
+  if (filtro.classificacao) partes.push(filtro.classificacao);
+  if (filtro.dataInicio || filtro.dataFim) {
+    const inicio = filtro.dataInicio ? formatarData(filtro.dataInicio) : "início";
+    const fim = filtro.dataFim ? formatarData(filtro.dataFim) : "hoje";
+    partes.push(`${inicio} a ${fim}`);
+  }
+  return partes.length ? partes.join(" · ") : "todos os registros";
+}
+
 async function carregarTabela(): Promise<void> {
   try {
     const resultado = filtroAtivo()
@@ -27,18 +42,19 @@ async function carregarTabela(): Promise<void> {
       pagina = resultado.totalPaginas - 1;
       return await carregarTabela();
     }
-    renderizarTabela(resultado, { editar: preencherFormulario, excluir });
-    const rotulo = filtroAtivo() ? "registros no filtro" : "registros";
-    el("contador").textContent = `${formatarNumero(resultado.totalElementos)} ${rotulo}`;
+    renderizarTabela(resultado, { detalhar: mostrarDetalhe, editar: preencherFormulario, excluir });
+    const rotulo = filtroAtivo() ? " no filtro" : "";
+    el("contador").textContent = `${formatarNumero(resultado.totalElementos)}${rotulo}`;
   } catch (erro) {
     mostrarMensagem(mensagemDeErro(erro), "erro");
   }
 }
 
-async function carregarGraficos(): Promise<void> {
+async function carregarIndicadores(): Promise<void> {
   try {
-    const [causas, mensal] = await Promise.all([api.topCausas(filtro), api.mensal(filtro)]);
-    desenharCausas(causas);
+    const [resumo, causas, mensal] = await Promise.all([api.resumo(filtro), api.topCausas(filtro), api.mensal(filtro)]);
+    renderizarKpis(resumo);
+    desenharCausas(causas, resumo.total);
     desenharMensal(mensal);
     if (!filtroAtivo()) {
       const sugestoes = el<HTMLDataListElement>("lista-causas");
@@ -50,7 +66,10 @@ async function carregarGraficos(): Promise<void> {
   }
 }
 
-const atualizarTudo = () => Promise.all([carregarTabela(), carregarGraficos()]);
+function atualizarTudo(): Promise<unknown> {
+  el("criterios-ativos").textContent = descreverFiltro();
+  return Promise.all([carregarTabela(), carregarIndicadores()]);
+}
 
 async function salvar(evento: SubmitEvent): Promise<void> {
   evento.preventDefault();
@@ -65,7 +84,7 @@ async function salvar(evento: SubmitEvent): Promise<void> {
       const criado = await api.criar(dados);
       mostrarMensagem(`Registro #${criado.id} cadastrado.`);
     }
-    limparFormulario();
+    fecharFormulario();
     await atualizarTudo();
   } catch (erro) {
     if (erro instanceof ApiErro) marcarErros(erro.erros);
@@ -81,7 +100,7 @@ async function excluir(a: Acidente): Promise<void> {
     await api.excluir(a.id);
     mostrarMensagem(`Registro #${a.id} excluído.`);
     if (el<HTMLInputElement>("campo-id").value === String(a.id)) limparFormulario();
-    if (Number(el<HTMLInputElement>("busca-id").value) === a.id) renderizarDetalhe(null, preencherFormulario);
+    if (registroEmDetalhe()?.id === a.id) fecharDetalhe();
     await atualizarTudo();
   } catch (erro) {
     mostrarMensagem(mensagemDeErro(erro), "erro");
@@ -96,8 +115,8 @@ async function buscarPorId(): Promise<void> {
   }
   try {
     const acidente = await api.buscar(id);
-    renderizarDetalhe(acidente, preencherFormulario);
-    if (!acidente) mostrarMensagem(`Registro ${id} não encontrado (HTTP 404).`, "erro");
+    if (acidente) mostrarDetalhe(acidente);
+    else mostrarMensagem(`Registro ${id} não encontrado (HTTP 404).`, "erro");
   } catch (erro) {
     mostrarMensagem(mensagemDeErro(erro), "erro");
   }
@@ -110,8 +129,9 @@ async function importar(): Promise<void> {
     return;
   }
   const botao = el<HTMLButtonElement>("btn-importar");
+  const rotulo = botao.lastChild!;
   botao.disabled = true;
-  botao.textContent = "Importando...";
+  rotulo.textContent = "Importando...";
   try {
     const resultado = await api.importar(arquivo);
     renderizarResultado(resultado);
@@ -124,7 +144,7 @@ async function importar(): Promise<void> {
     mostrarMensagem(mensagem, "erro");
   } finally {
     botao.disabled = false;
-    botao.textContent = "Importar";
+    rotulo.textContent = "Importar";
   }
 }
 
@@ -148,18 +168,40 @@ function limparFiltros(): void {
   void atualizarTudo();
 }
 
+function abrirImportacao(): void {
+  el<HTMLInputElement>("arquivo").value = "";
+  el("resultado-importacao").replaceChildren();
+  el<HTMLDialogElement>("dialogo-importacao").showModal();
+}
+
 function iniciar(): void {
+  configurarGraficos();
   preencherOpcoes(el<HTMLSelectElement>("filtro-uf"), UFS);
   preencherOpcoes(el<HTMLSelectElement>("campo-uf"), UFS);
   preencherOpcoes(el<HTMLSelectElement>("filtro-classificacao"), CLASSIFICACOES);
   preencherOpcoes(el<HTMLSelectElement>("campo-classificacao"), CLASSIFICACOES);
   preencherOpcoes(el<HTMLDataListElement>("lista-tipos"), TIPOS_ACIDENTE);
 
+  for (const botao of document.querySelectorAll<HTMLButtonElement>("[data-fechar]")) {
+    botao.addEventListener("click", () => botao.closest("dialog")?.close());
+  }
+  el<HTMLDialogElement>("dialogo-formulario").addEventListener("close", limparFormulario);
+
+  el("btn-novo").addEventListener("click", abrirNovoRegistro);
+  el("btn-abrir-importacao").addEventListener("click", abrirImportacao);
   el<HTMLFormElement>("form-acidente").addEventListener("submit", (e) => void salvar(e));
-  el("btn-cancelar").addEventListener("click", limparFormulario);
+  el("btn-cancelar").addEventListener("click", fecharFormulario);
+  el("btn-editar-detalhe").addEventListener("click", () => {
+    const registro = registroEmDetalhe();
+    fecharDetalhe();
+    if (registro) preencherFormulario(registro);
+  });
   el("btn-filtrar").addEventListener("click", aplicarFiltros);
   el("btn-limpar-filtros").addEventListener("click", limparFiltros);
   el("btn-buscar").addEventListener("click", () => void buscarPorId());
+  el("busca-id").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") void buscarPorId();
+  });
   el("btn-importar").addEventListener("click", () => void importar());
   el("pag-anterior").addEventListener("click", () => {
     pagina--;
