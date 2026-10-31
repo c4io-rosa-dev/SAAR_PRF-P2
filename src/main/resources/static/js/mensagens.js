@@ -2,7 +2,12 @@ import { ApiErro } from "./api.js";
 import { el, elemento } from "./dom.js";
 export function mostrarMensagem(texto, tipo = "sucesso") {
     const toast = elemento("div", texto, `toast toast-${tipo}`);
-    el("toasts").append(toast);
+    const caixa = el("toasts");
+    caixa.append(toast);
+    // reabrir o popover o coloca acima de um dialog modal aberto (top layer)
+    if (caixa.matches(":popover-open"))
+        caixa.hidePopover();
+    caixa.showPopover();
     setTimeout(() => toast.remove(), 5000);
 }
 export function mensagemDeErro(erro) {

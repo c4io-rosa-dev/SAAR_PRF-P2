@@ -3,7 +3,11 @@ import { el, elemento } from "./dom.js";
 
 export function mostrarMensagem(texto: string, tipo: "sucesso" | "erro" = "sucesso"): void {
   const toast = elemento("div", texto, `toast toast-${tipo}`);
-  el("toasts").append(toast);
+  const caixa = el("toasts");
+  caixa.append(toast);
+  // reabrir o popover o coloca acima de um dialog modal aberto (top layer)
+  if (caixa.matches(":popover-open")) caixa.hidePopover();
+  caixa.showPopover();
   setTimeout(() => toast.remove(), 5000);
 }
 

@@ -1,0 +1,63 @@
+Host: ep-*****.c-2.sa-east-1.aws.neon.tech
+
+neondb=> select current_database() as banco, current_user as usuario, split_part(version(), ' on ', 1) as versao;
+ banco  | usuario      | versao                   
+--------+--------------+--------------------------
+ neondb | neondb_owner | PostgreSQL 18.6 (4e5fd08)
+(1 linha)
+
+neondb=> select count(*) as registros, count(distinct uf) as ufs, min(data_ocorrencia) as data_inicial, max(data_ocorrencia) as data_final, sum(mortos) as mortos, sum(feridos) as feridos from acidente;
+ registros | ufs | data_inicial | data_final | mortos | feridos
+-----------+-----+--------------+------------+--------+--------
+ 119965    | 27  | 2025-01-01   | 2026-08-31 | 10073  | 138281 
+(1 linha)
+
+neondb=> select column_name as coluna, data_type as tipo, is_nullable as aceita_nulo from information_schema.columns where table_name = 'acidente' order by ordinal_position;
+ coluna          | tipo                   | aceita_nulo
+-----------------+------------------------+------------
+ id              | bigint                 | NO         
+ causa_acidente  | character varying      | NO         
+ classificacao   | character varying      | NO         
+ data_ocorrencia | date                   | NO         
+ feridos         | integer                | NO         
+ horario         | time without time zone | NO         
+ id_prf          | bigint                 | YES        
+ latitude        | numeric                | NO         
+ longitude       | numeric                | NO         
+ mortos          | integer                | NO         
+ municipio       | character varying      | NO         
+ quilometro      | numeric                | NO         
+ rodovia         | character varying      | NO         
+ tipo_acidente   | character varying      | NO         
+ uf              | character varying      | NO         
+(15 linhas)
+
+neondb=> select id, id_prf, data_ocorrencia, horario, uf, municipio, rodovia, quilometro, classificacao from acidente order by data_ocorrencia desc, horario desc, id desc limit 5;
+ id     | id_prf | data_ocorrencia | horario  | uf | municipio             | rodovia | quilometro | classificacao      
+--------+--------+-----------------+----------+----+-----------------------+---------+------------+--------------------
+ 85025  | 796258 | 2026-08-31      | 23:55:00 | RJ | CAMPOS DOS GOYTACAZES | BR-101  | 58.0       | Com Vítimas Feridas
+ 85027  | 796261 | 2026-08-31      | 23:53:00 | PR | PONTA GROSSA          | BR-376  | 518.0      | Com Vítimas Feridas
+ 120809 | 796257 | 2026-08-31      | 23:35:00 | MG | UBERABA               | BR-050  | 135.9      | Sem Vítimas        
+ 120808 | 796256 | 2026-08-31      | 23:30:00 | SC | CONCORDIA             | BR-153  | 113.0      | Sem Vítimas        
+ 120806 | 796251 | 2026-08-31      | 23:25:00 | GO | LUZIANIA              | BR-040  | 9.0        | Com Vítimas Feridas
+(5 linhas)
+
+neondb=> select uf, count(*) as total from acidente group by uf order by total desc limit 5;
+ uf | total
+----+------
+ MG | 15734
+ SC | 13652
+ PR | 12768
+ RJ | 10672
+ RS | 7852 
+(5 linhas)
+
+neondb=> select indexname, split_part(indexdef, ' USING ', 2) as definicao from pg_indexes where tablename = 'acidente';
+ indexname                   | definicao              
+-----------------------------+------------------------
+ acidente_pkey               | btree (id)             
+ idx_acidente_uf             | btree (uf)             
+ idx_acidente_data           | btree (data_ocorrencia)
+ idx_acidente_classificacao  | btree (classificacao)  
+ ukcsfla3reihqpgan0sunygv43j | btree (id_prf)         
+(5 linhas)

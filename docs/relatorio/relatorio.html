@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Relatório Técnico — SAAR PRF — Grupo 02</title>
+<style>
+  @font-face { font-family: "Public Sans"; src: url("../../src/main/resources/static/fonts/public-sans-latin.woff2") format("woff2"); font-weight: 100 900; }
+  :root { --tinta: #14213d; --texto: #1f2937; --suave: #5b6576; --linha: #d7dce4; --fundo: #f4f6f9; --laranja: #e8692c; --ciano: #0e7fb8; }
+  @page {
+    size: A4; margin: 20mm 18mm 20mm 18mm;
+    @bottom-left { content: "SAAR PRF · Relatório técnico · Grupo 02"; font: 8pt "Public Sans", sans-serif; color: #7a8394; }
+    @bottom-right { content: counter(page) " / " counter(pages); font: 8pt "Public Sans", sans-serif; color: #7a8394; }
+  }
+  @page capa { margin: 0; @bottom-left { content: none; } @bottom-right { content: none; } }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; font: 10pt/1.5 "Public Sans", "Segoe UI", sans-serif; color: var(--texto); counter-reset: fig tab; }
+  h1, h2, h3 { color: var(--tinta); line-height: 1.25; break-after: avoid; }
+  h2 { font-size: 15pt; margin: 0 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--laranja); }
+  h2 .num { color: var(--laranja); margin-right: 8px; }
+  h3 { font-size: 11.5pt; margin: 18px 0 6px; }
+  p { margin: 0 0 8px; text-align: justify; hyphens: auto; }
+  ul, ol { margin: 0 0 8px; padding-left: 20px; }
+  li { margin-bottom: 2px; }
+  a { color: var(--ciano); text-decoration: none; }
+  code { font: 8.6pt/1.4 Consolas, "Cascadia Mono", monospace; background: var(--fundo); padding: 1px 4px; border-radius: 3px; }
+  pre { font: 8pt/1.45 Consolas, "Cascadia Mono", monospace; background: var(--fundo); border: 1px solid var(--linha); border-radius: 6px; padding: 10px 12px; margin: 6px 0 10px; white-space: pre-wrap; word-break: break-word; break-inside: avoid; }
+  pre.terminal { background: #0f1724; color: #d6e2f0; border-color: #0f1724; font-size: 6.9pt; break-inside: auto; }
+  section.capitulo { break-before: page; }
+  table { width: 100%; border-collapse: collapse; margin: 6px 0 12px; font-size: 8.6pt; break-inside: auto; }
+  th, td { border: 1px solid var(--linha); padding: 4px 6px; text-align: left; vertical-align: top; }
+  th { background: var(--tinta); color: #fff; font-weight: 600; }
+  tr { break-inside: avoid; }
+  tbody tr:nth-child(even) td { background: #f8f9fb; }
+  table caption { caption-side: top; text-align: left; font-size: 8.6pt; color: var(--suave); padding-bottom: 4px; }
+  table.legendada caption::before { counter-increment: tab; content: "Tabela " counter(tab) " — "; font-weight: 700; color: var(--tinta); }
+  td.ok { color: #15803d; font-weight: 700; white-space: nowrap; }
+  td.num, th.num { text-align: right; white-space: nowrap; }
+  figure { margin: 10px 0 14px; break-inside: avoid; }
+  figure img { display: block; width: 100%; border: 1px solid var(--linha); border-radius: 4px; }
+  figure img.meia { width: 62%; margin: 0 auto; }
+  figcaption { font-size: 8.6pt; color: var(--suave); margin-top: 5px; text-align: justify; }
+  figcaption::before { counter-increment: fig; content: "Figura " counter(fig) " — "; font-weight: 700; color: var(--tinta); }
+  .pendente { border: 2px dashed var(--laranja); border-radius: 6px; padding: 28px 16px; text-align: center; color: var(--laranja); font-weight: 600; background: #fff7f2; }
+  .destaque { border-left: 3px solid var(--laranja); background: #fff7f2; padding: 8px 12px; margin: 8px 0 12px; border-radius: 0 6px 6px 0; }
+  .grade2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grade2 figure { margin: 0; }
+  .fluxo { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin: 8px 0 12px; font-size: 8.4pt; }
+  .fluxo span { border: 1px solid var(--linha); background: var(--fundo); border-radius: 5px; padding: 5px 8px; }
+  .fluxo span.forte { background: var(--tinta); color: #fff; border-color: var(--tinta); }
+  .fluxo b { color: var(--laranja); }
+  .arquitetura { display: grid; grid-template-columns: 1fr; gap: 6px; margin: 8px 0 14px; break-inside: avoid; }
+  .camada { display: grid; grid-template-columns: 130px 1fr; border: 1px solid var(--linha); border-radius: 6px; overflow: hidden; }
+  .camada strong { background: var(--tinta); color: #fff; padding: 7px 10px; font-size: 9pt; }
+  .camada div { padding: 7px 10px; font-size: 8.6pt; }
+  .camada.banco strong { background: var(--laranja); }
+  .sumario ol { columns: 2; column-gap: 28px; padding-left: 18px; }
+  .sumario li { margin-bottom: 5px; }
+
+  /* capa */
+  .capa { page: capa; height: 297mm; display: flex; flex-direction: column; background: #0b1220; color: #e8edf5; position: relative; overflow: hidden; }
+  .capa::before { content: ""; position: absolute; inset: 0; background: linear-gradient(160deg, rgba(232,105,44,.22), transparent 45%), radial-gradient(circle at 85% 80%, rgba(14,127,184,.35), transparent 50%); }
+  .capa > * { position: relative; }
+  .capa-topo { padding: 26mm 22mm 0; font-size: 10pt; letter-spacing: .08em; text-transform: uppercase; color: #aeb9cb; }
+  .capa-topo strong { display: block; color: #fff; font-size: 12pt; letter-spacing: .1em; }
+  .capa-meio { padding: 0 22mm; margin-top: 52mm; }
+  .capa-meio .selo { display: inline-block; border: 1px solid rgba(255,255,255,.3); border-radius: 999px; padding: 4px 12px; font-size: 9pt; letter-spacing: .06em; color: #ffb48f; }
+  .capa-meio h1 { color: #fff; font-size: 40pt; margin: 14px 0 4px; letter-spacing: -.01em; }
+  .capa-meio .sub { font-size: 15pt; color: #d0d9e6; margin: 0 0 18px; }
+  .capa-meio .tipo { font-size: 11pt; color: #aeb9cb; }
+  .capa-base { margin-top: auto; padding: 0 22mm 22mm; display: grid; grid-template-columns: 1.2fr 1fr; gap: 18px; font-size: 9.5pt; }
+  .capa-base h4 { margin: 0 0 4px; font-size: 8pt; letter-spacing: .1em; text-transform: uppercase; color: #ffb48f; }
+  .capa-base p { margin: 0 0 10px; text-align: left; color: #e8edf5; }
+  .capa-base a { color: #7fd0ff; }
+</style>
+</head>
+<body>
+
+<!-- ===================== CAPA ===================== -->
+<div class="capa">
+  <div class="capa-topo">
+    <strong>FATEC Ipiranga</strong>
+    Programação Avançada Orientada a Objetos · Profa. Me. Sirley Ambrosia Vitorio Addão
+  </div>
+  <div class="capa-meio">
+    <span class="selo">Projeto 03 · Avaliação P2 · Grupo 02</span>
+    <h1>SAAR PRF</h1>
+    <p class="sub">Sistema de Análise de Acidentes Rodoviários</p>
+    <p class="tipo">Relatório técnico — API REST com Spring Boot, PostgreSQL no Neon e interface web</p>
+  </div>
+  <div class="capa-base">
+    <div>
+      <h4>Integrantes</h4>
+      <p>Caio Rosa<br>Guilherme Dino<br>Samuel Goes</p>
+      <h4>Turma</h4>
+      <p>Análise e Desenvolvimento de Sistemas<br>4º semestre · Noturno</p>
+    </div>
+    <div>
+      <h4>Repositório</h4>
+      <p><a href="https://github.com/c4io-rosa-dev/SAAR_PRF-P2">github.com/c4io-rosa-dev/SAAR_PRF-P2</a></p>
+      <h4>Data</h4>
+      <p>São Paulo, 31 de outubro de 2026</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SUMÁRIO ===================== -->
+<section class="sumario">
+  <h2>Sumário</h2>
+  <ol>
+    <li>Identificação</li>
+    <li>Problema e objetivos</li>
+    <li>Fonte oficial dos dados</li>
+    <li>Compreensão dos dados</li>
+    <li>Tratamento dos dados</li>
+    <li>Solução: arquitetura e fluxo</li>
+    <li>Dicionário da entidade</li>
+    <li>API REST</li>
+    <li>Decisões técnicas</li>
+    <li>Evidências</li>
+    <li>Testes</li>
+    <li>Dificuldades, limitações e melhorias</li>
+    <li>GitHub e commit final</li>
+  </ol>
+
+  <h2 style="margin-top:26px"><span class="num">1</span>Identificação</h2>
+  <table>
+    <tbody>
+      <tr><th style="width:30%">Título</th><td>Sistema de Análise de Acidentes Rodoviários</td></tr>
+      <tr><th>Sigla</th><td>SAAR PRF</td></tr>
+      <tr><th>Disciplina</th><td>Programação Avançada Orientada a Objetos — Projeto P2 (Projeto 03)</td></tr>
+      <tr><th>Professora</th><td>Profa. Me. Sirley Ambrosia Vitorio Addão</td></tr>
+      <tr><th>Instituição</th><td>FATEC Ipiranga</td></tr>
+      <tr><th>Turma</th><td>Análise e Desenvolvimento de Sistemas — 4º semestre — Noturno</td></tr>
+      <tr><th>Grupo</th><td>02</td></tr>
+      <tr><th>Integrantes</th><td>Caio Rosa · Guilherme Dino · Samuel Goes</td></tr>
+      <tr><th>Data</th><td>31 de outubro de 2026</td></tr>
+      <tr><th>Repositório</th><td><a href="https://github.com/c4io-rosa-dev/SAAR_PRF-P2">https://github.com/c4io-rosa-dev/SAAR_PRF-P2</a></td></tr>
+      <tr><th>Tecnologias</th><td>Java 21, Spring Boot 4.1.2 (Web MVC, Data JPA, Validation), Hibernate 7, PostgreSQL 18 no Neon, Apache Commons CSV, HTML, CSS, TypeScript 5.9 compilado para JavaScript (ES modules, <code>fetch()</code>), Chart.js 4.4, JUnit 5 e Mockito</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ===================== 2 ===================== -->
+<section class="capitulo">
+  <h2><span class="num">2</span>Problema e objetivos</h2>
+  <h3>Contexto</h3>
+  <p>A Polícia Rodoviária Federal (PRF) publica, em seu portal de dados abertos, o registro de todos os acidentes atendidos nas rodovias federais brasileiras. Os arquivos são extensos (mais de 70 mil ocorrências por ano), têm 30 colunas, classificações próprias, marcadores de valor ausente e coordenadas geográficas. Para serem úteis em análises de segurança viária, esses dados precisam ser selecionados, validados, padronizados e organizados antes de qualquer consulta.</p>
+  <h3>Usuários</h3>
+  <ul>
+    <li><strong>Gestores e analistas de segurança viária</strong> (órgãos de trânsito, concessionárias, a própria PRF), que precisam identificar trechos críticos e causas recorrentes;</li>
+    <li><strong>Pesquisadores e estudantes</strong>, que precisam de uma base limpa e consultável por recorte (UF, gravidade, período);</li>
+    <li><strong>Operadores do sistema</strong>, responsáveis por importar novos arquivos oficiais e corrigir registros pontualmente.</li>
+  </ul>
+  <h3>Problema resolvido</h3>
+  <p>O SAAR PRF transforma o CSV bruto da PRF em uma base relacional tratada, persistida no PostgreSQL do Neon, e oferece uma interface web onde é possível importar novos arquivos com relatório de qualidade (linhas lidas, importadas, rejeitadas e duplicadas), consultar e filtrar as ocorrências, manter registros (cadastrar, editar, excluir) e responder perguntas de negócio por meio de indicadores e gráficos atualizados conforme o recorte escolhido.</p>
+  <h3>Objetivo geral</h3>
+  <p>Desenvolver uma aplicação web com API REST em Spring Boot, persistência no PostgreSQL do Neon e interface HTML, CSS e JavaScript (TypeScript compilado), utilizando os dados abertos oficiais da PRF para apoiar consultas e análises sobre acidentes, locais, causas e consequências nas rodovias federais.</p>
+  <h3>Objetivos específicos</h3>
+  <ol>
+    <li>Pesquisar e selecionar o conjunto oficial “Acidentes — agrupados por ocorrência” (2025 e 2026) no Portal de Dados Abertos da PRF.</li>
+    <li>Compreender a estrutura do arquivo e o dicionário de dados oficial, identificando divergências entre documentação e arquivo real.</li>
+    <li>Selecionar 13 campos de domínio, justificar os 17 descartados e modelar a entidade <code>Acidente</code>.</li>
+    <li>Tratar programaticamente valores inválidos, ausentes (<code>NA</code>), duplicados e incompatíveis, contabilizando cada rejeição com o motivo.</li>
+    <li>Implementar a API REST nas camadas Model, Repository, Service e Controller, com <code>ResponseEntity</code>, <code>Optional</code> e validação antes da persistência.</li>
+    <li>Armazenar os 119.965 registros tratados no PostgreSQL publicado no Neon.</li>
+    <li>Criar uma interface que consuma a API com <code>fetch()</code>, com CRUD, busca por ID, filtros, importação, indicadores e dois gráficos.</li>
+    <li>Documentar decisões, testes (62 automatizados e testes ponta a ponta) e evidências de funcionamento.</li>
+  </ol>
+</section>
+
+<!-- ===================== 3 ===================== -->
+<section class="capitulo">
+  <h2><span class="num">3</span>Fonte oficial dos dados</h2>
+  <table class="legendada">
+    <caption>Identificação do conjunto de dados utilizado</caption>
+    <tbody>
+      <tr><th style="width:26%">Órgão</th><td>Polícia Rodoviária Federal (PRF) — Ministério da Justiça e Segurança Pública</td></tr>
+      <tr><th>Portal</th><td>Portal de Dados Abertos da PRF</td></tr>
+      <tr><th>Link exato</th><td><a href="https://www.gov.br/prf/pt-br/acesso-a-informacao/dados-abertos/dados-abertos-da-prf">https://www.gov.br/prf/pt-br/acesso-a-informacao/dados-abertos/dados-abertos-da-prf</a></td></tr>
+      <tr><th>Recurso</th><td>Seção “Acidentes”, conjunto “Agrupados por ocorrência”, anos 2025 e 2026</td></tr>
+      <tr><th>Arquivos</th><td><code>datatran2025.zip</code> → <code>datatran2025.csv</code> (21,1 MB) · <code>datatran2026.zip</code> → <code>datatran2026.csv</code> (14,2 MB)</td></tr>
+      <tr><th>Dicionário de dados</th><td>“Dicionário de Variáveis — dados desagregados por ocorrência — a partir de 2017”: <a href="https://www.gov.br/prf/pt-br/acesso-a-informacao/dados-abertos/dicionario-acidentes">https://www.gov.br/prf/pt-br/acesso-a-informacao/dados-abertos/dicionario-acidentes</a></td></tr>
+      <tr><th>Formato</th><td>CSV, codificação ISO-8859-1, quebra de linha CRLF, separador ponto e vírgula, textos entre aspas, decimal com vírgula, valor ausente representado por <code>NA</code>, 30 colunas com o mesmo cabeçalho nos dois anos</td></tr>
+      <tr><th>Volume</th><td>2025: 72.529 ocorrências (01/01 a 31/12/2025) · 2026: 48.712 ocorrências (01/01 a 31/08/2026) · total 121.241 linhas</td></tr>
+      <tr><th>Data de acesso</th><td>25/10/2026</td></tr>
+      <tr><th>Licença</th><td>Creative Commons Atribuição-SemDerivações (CC BY-ND 3.0)</td></tr>
+    </tbody>
+  </table>
+  <h3>Justificativa da escolha</h3>
+  <p>O conjunto agrupado por ocorrência tem exatamente a granularidade do problema (um acidente por linha), ao contrário dos conjuntos por pessoa ou por veículo, que repetem a mesma ocorrência várias vezes. Os anos 2025 e 2026 são os mais recentes publicados, o que torna a análise atual e permite comparar o mesmo período de dois anos consecutivos. O volume (121 mil linhas, 35 MB) é grande o suficiente para exigir tratamento automatizado, importação em lote e consultas paginadas, mas ainda cabe no plano gratuito do Neon.</p>
+  <div class="destaque">Por causa da licença CC BY-ND e do tamanho, os arquivos oficiais <strong>não são versionados</strong> no GitHub. O repositório contém o link oficial, as instruções de download e o script <code>scripts/gerar_amostra.py</code>, que reproduz a amostra e os arquivos de carga a partir dos CSVs originais.</div>
+</section>
+
+<!-- ===================== 4 ===================== -->
+<section class="capitulo">
+  <h2><span class="num">4</span>Compreensão dos dados</h2>
+  <p>O dicionário oficial foi consultado coluna a coluna e confrontado com o conteúdo real dos arquivos. A Tabela 2 descreve as 30 colunas e indica quais foram usadas no sistema.</p>
+  <table class="legendada">
+    <caption>Colunas do arquivo oficial, significado segundo o dicionário e uso no sistema</caption>
+    <thead><tr><th>Coluna</th><th>Significado (dicionário PRF)</th><th>Uso</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>Identificador da ocorrência na PRF</td><td>usado → <code>idPrf</code> (deduplicação)</td></tr>
+      <tr><td><code>data_inversa</code></td><td>Data da ocorrência</td><td>usado → <code>dataOcorrencia</code></td></tr>
+      <tr><td><code>dia_semana</code></td><td>Dia da semana da ocorrência</td><td>descartado (derivável da data)</td></tr>
+      <tr><td><code>horario</code></td><td>Horário da ocorrência</td><td>usado → <code>horario</code></td></tr>
+      <tr><td><code>uf</code></td><td>Unidade da Federação</td><td>usado → <code>uf</code></td></tr>
+      <tr><td><code>br</code></td><td>Número da rodovia federal (BR)</td><td>usado → <code>rodovia</code></td></tr>
+      <tr><td><code>km</code></td><td>Quilômetro do acidente</td><td>usado → <code>quilometro</code></td></tr>
+      <tr><td><code>municipio</code></td><td>Município da ocorrência</td><td>usado → <code>municipio</code></td></tr>
+      <tr><td><code>causa_acidente</code></td><td>Causa principal presumível do acidente</td><td>usado → <code>causaAcidente</code></td></tr>
+      <tr><td><code>tipo_acidente</code></td><td>Tipo de acidente (colisão traseira, tombamento, atropelamento…)</td><td>usado → <code>tipoAcidente</code></td></tr>
+      <tr><td><code>classificacao_acidente</code></td><td>Gravidade: Sem Vítimas, Com Vítimas Feridas, Com Vítimas Fatais ou Ignorado</td><td>usado → <code>classificacao</code></td></tr>
+      <tr><td><code>fase_dia</code></td><td>Fase do dia (amanhecer, pleno dia, anoitecer, plena noite)</td><td>descartado</td></tr>
+      <tr><td><code>sentido_via</code></td><td>Sentido da via (crescente/decrescente)</td><td>descartado</td></tr>
+      <tr><td><code>condicao_metereologica</code></td><td>Condição meteorológica no momento</td><td>descartado</td></tr>
+      <tr><td><code>tipo_pista</code></td><td>Tipo de pista (simples, dupla, múltipla)</td><td>descartado</td></tr>
+      <tr><td><code>tracado_via</code></td><td>Traçado da via (reta, curva, interseção…)</td><td>descartado</td></tr>
+      <tr><td><code>uso_solo</code></td><td>Uso do solo: Sim = área urbana, Não = rural</td><td>descartado</td></tr>
+      <tr><td><code>pessoas</code></td><td>Total de pessoas envolvidas</td><td>descartado (diverge da soma das vítimas em ~5% das linhas)</td></tr>
+      <tr><td><code>mortos</code></td><td>Pessoas mortas no local</td><td>usado → <code>mortos</code></td></tr>
+      <tr><td><code>feridos_leves</code> / <code>feridos_graves</code></td><td>Feridos leves e graves</td><td>descartados (total já em <code>feridos</code>)</td></tr>
+      <tr><td><code>ilesos</code> / <code>ignorados</code></td><td>Pessoas ilesas / estado físico ignorado</td><td>descartados</td></tr>
+      <tr><td><code>feridos</code></td><td>Total de feridos (leves + graves)</td><td>usado → <code>feridos</code></td></tr>
+      <tr><td><code>veiculos</code></td><td>Quantidade de veículos envolvidos</td><td>descartado</td></tr>
+      <tr><td><code>latitude</code> / <code>longitude</code></td><td>Coordenadas geográficas da ocorrência</td><td>usados → <code>latitude</code>, <code>longitude</code></td></tr>
+      <tr><td><code>regional</code> / <code>delegacia</code> / <code>uop</code></td><td>Superintendência, delegacia e unidade operacional da PRF</td><td>descartados (administrativos)</td></tr>
+    </tbody>
+  </table>
+  <h3>Divergências entre o dicionário e o arquivo real</h3>
+  <ul>
+    <li><strong>Data:</strong> o dicionário documenta <code>dd/mm/aaaa</code>, mas o arquivo usa <code>aaaa-mm-dd</code>. O importador aceita os dois formatos.</li>
+    <li><strong>Quilômetro e coordenadas:</strong> o dicionário mostra ponto decimal; o arquivo usa vírgula. O importador aceita ambos.</li>
+    <li><strong>km 0:</strong> o dicionário cita 0,1 km como mínimo, mas há 285 ocorrências com km 0 em rodovias identificadas (marco inicial da rodovia). Foram aceitas.</li>
+    <li><strong>Rodovia não identificada:</strong> 267 linhas trazem <code>br = 0</code> (sempre com km 0), marcador usado pela PRF quando a rodovia não foi identificada.</li>
+  </ul>
+</section>
+
+<!-- ===================== 5 ===================== -->
+<section class="capitulo">
+  <h2><span class="num">5</span>Tratamento dos dados</h2>
+  <h3>Campos selecionados e descartados</h3>
+  <p>Foram selecionados <strong>13 campos de domínio</strong>, além do identificador gerado pela aplicação e do <code>idPrf</code> de controle. O critério foi responder às perguntas do sistema: <em>onde</em> (UF, município, rodovia, km, latitude, longitude), <em>quando</em> (data, horário), <em>por quê e como</em> (causa, tipo) e <em>com que gravidade</em> (classificação, mortos, feridos). Os 17 campos descartados são deriváveis de outros (dia da semana, feridos leves e graves), inconsistentes (pessoas), administrativos da PRF (regional, delegacia, UOP) ou condições do local que não fazem parte das análises propostas (fase do dia, sentido, clima, pista, traçado, uso do solo, ilesos, ignorados, veículos). A estrutura permite incluí-los futuramente sem alterar o fluxo de importação.</p>
+
+  <h3>Conversões e padronizações</h3>
+  <table class="legendada">
+    <caption>Regras aplicadas pelo <code>ConversorLinhaCsv</code> e pela Bean Validation a cada linha</caption>
+    <thead><tr><th>Campo</th><th>Conversão / padronização</th><th>Rejeição quando</th></tr></thead>
+    <tbody>
+      <tr><td>todos os textos</td><td>remove espaços nas pontas e colapsa espaços repetidos; <code>NA</code> vira ausente</td><td>—</td></tr>
+      <tr><td>id</td><td>somente dígitos → <code>Long</code></td><td>notação científica (<code>8e+05</code>) ou vazio: “id PRF inválido”</td></tr>
+      <tr><td>data</td><td><code>aaaa-mm-dd</code> ou <code>dd/mm/aaaa</code> → <code>LocalDate</code></td><td>ausente, inválida ou futura</td></tr>
+      <tr><td>horário</td><td><code>HH:mm:ss</code> ou <code>HH:mm</code> → <code>LocalTime</code></td><td>ausente ou inválido</td></tr>
+      <tr><td>UF</td><td>maiúsculas</td><td>fora das 27 UFs</td></tr>
+      <tr><td>município</td><td>maiúsculas, espaços normalizados</td><td>vazio ou mais de 60 caracteres</td></tr>
+      <tr><td>rodovia</td><td>número → <code>BR-</code> + 3 dígitos (<code>101</code> → <code>BR-101</code>, <code>40</code> → <code>BR-040</code>)</td><td><code>br = 0</code> ou ausente: “rodovia não identificada”</td></tr>
+      <tr><td>km</td><td>vírgula ou ponto → <code>BigDecimal(7,1)</code></td><td>negativo, acima de 9.999,9 ou não numérico</td></tr>
+      <tr><td>classificação</td><td>valor do domínio oficial</td><td><code>NA</code>: “classificação ausente”; fora das 4 classes</td></tr>
+      <tr><td>mortos, feridos</td><td>inteiro</td><td>negativo ou não numérico</td></tr>
+      <tr><td>latitude, longitude</td><td>vírgula ou ponto → <code>BigDecimal(10,7)</code></td><td>fora do território brasileiro (lat −34 a 6; lon −74 a −34)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Problemas reais encontrados na base</h3>
+  <table class="legendada">
+    <caption>Problemas identificados na análise das 121.241 linhas oficiais e o tratamento adotado</caption>
+    <thead><tr><th>Problema</th><th class="num">Casos</th><th>Tratamento</th></tr></thead>
+    <tbody>
+      <tr><td><code>br = 0</code> (rodovia não identificada)</td><td class="num">267</td><td>rejeitado com motivo “rodovia não identificada”</td></tr>
+      <tr><td>km 0 em rodovia identificada</td><td class="num">285</td><td>aceito (marco inicial da rodovia)</td></tr>
+      <tr><td>espaço duplo no município</td><td class="num">16</td><td>normalizado</td></tr>
+      <tr><td><code>classificacao_acidente = NA</code></td><td class="num">2</td><td>rejeitado: “classificação ausente”</td></tr>
+      <tr><td><code>id</code> em notação científica (<code>8e+05</code>)</td><td class="num">1</td><td>rejeitado: “id PRF inválido” (valor original irrecuperável)</td></tr>
+      <tr><td>duplicatas pelo <code>id</code> da PRF</td><td class="num">0</td><td><code>idPrf</code> único; repetições contadas como “duplicadas”</td></tr>
+      <tr><td>duplicatas lógicas (mesmo local e minuto)</td><td class="num">57 grupos</td><td>mantidas: coordenadas e causas diferem, são ocorrências distintas</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Erros estruturais e política de importação</h3>
+  <p>Antes de gravar qualquer linha, o <code>ImportacaoService</code> valida a estrutura do arquivo. Um erro estrutural <strong>interrompe a importação inteira</strong> e devolve HTTP 400 com mensagem explicativa: arquivo vazio, extensão diferente de <code>.csv</code>, cabeçalho ausente ou sem as 14 colunas obrigatórias, coluna sem nome, separador diferente de ponto e vírgula, codificação UTF-8 com BOM e CSV malformado (aspas quebradas).</p>
+  <ul>
+    <li><strong>Linha individual inválida:</strong> é rejeitada e contabilizada com o motivo, sem interromper as demais. A resposta traz a contagem por motivo e as 20 primeiras linhas rejeitadas.</li>
+    <li><strong>Reimportação:</strong> não duplica registros. O <code>id</code> original da PRF é gravado em <code>idPrf</code> (restrição UNIQUE). Antes de ler o arquivo, o serviço carrega os <code>idPrf</code> já existentes num <code>HashSet</code> e acrescenta os vistos no próprio arquivo; repetições são contadas como “duplicadas”.</li>
+    <li><strong>Cadastro manual:</strong> registros criados pela interface têm <code>idPrf</code> nulo, pois não vieram da PRF.</li>
+  </ul>
+
+  <h3>Amostragem programática e carga completa</h3>
+  <p>A base completa foi carregada no Neon. Para que a importação possa ser demonstrada ao vivo com registros novos, o script <code>scripts/gerar_amostra.py</code> (semente 42) separa uma amostra que <strong>não</strong> entra na carga prévia:</p>
+  <ul>
+    <li><code>amostra_demo_prf.csv</code>: 1.014 linhas reais — 1.004 válidas sorteadas por estratificação proporcional por ano e UF (54 estratos, mínimo de 2 por estrato) e 10 linhas reais com problemas (1 id inválido, 2 classificações ausentes, 5 rodovias não identificadas, 2 espaços duplos). Resultado: 1.006 registros válidos, acima do mínimo de 500 exigido.</li>
+    <li><code>datatran2025_carga.csv</code> (71.924 linhas) e <code>datatran2026_carga.csv</code> (48.303 linhas): arquivos oficiais menos a amostra. Conferência: 1.014 + 71.924 + 48.303 = 121.241.</li>
+    <li><code>dados/testes/invalido_*.csv</code>: arquivos com erro estrutural para a demonstração de importação inválida.</li>
+  </ul>
+  <p>A carga das 120.227 linhas resultou em <strong>119.965 registros importados</strong> e 262 rejeitados, todos por rodovia não identificada; as demais 5 linhas com <code>br = 0</code> estão na amostra.</p>
+</section>
+
+<!-- ===================== 6 ===================== -->
+<section class="capitulo">
+  <h2><span class="num">6</span>Solução: arquitetura e fluxo dos dados</h2>
+  <p>A aplicação é um único projeto Spring Boot que expõe a API REST em <code>/api/acidentes</code> e serve as páginas estáticas de <code>src/main/resources/static</code>. A interface nunca acessa o banco: toda leitura e escrita passa pela API, via <code>fetch()</code>.</p>
+  <div class="arquitetura">
+    <div class="camada"><strong>View</strong><div><code>index.html</code> (página inicial com destaques) e <code>painel.html</code> (CRUD, filtros, importação, indicadores e gráficos); <code>css/style.css</code>; <code>js/</code> compilado de <code>src/main/frontend/ts</code>.</div></div>
+    <div class="camada"><strong>Integração</strong><div><code>api.ts</code> centraliza o <code>fetch()</code>: JSON para o CRUD e filtros, <code>FormData</code> (multipart) para a importação; converte respostas de erro em <code>ApiErro</code> com mensagem e erros por campo.</div></div>
+    <div class="camada"><strong>Controller</strong><div><code>AcidenteController</code>: recebe as requisições, valida o corpo com <code>@Valid</code>, delega ao serviço e devolve <code>ResponseEntity</code> com o status adequado. <code>TratadorErros</code> (<code>@RestControllerAdvice</code>) converte erros de validação e de importação em HTTP 400 legível.</div></div>
+    <div class="camada"><strong>Service</strong><div><code>AcidenteService</code>: CRUD, normalização, filtro paginado e estatísticas. <code>ImportacaoService</code>: validação estrutural, leitura em fluxo, deduplicação e gravação em lotes. <code>ConversorLinhaCsv</code>: converte uma linha do CSV em <code>Acidente</code> ou no motivo da rejeição.</div></div>
+    <div class="camada"><strong>Repository</strong><div><code>AcidenteRepository</code> (<code>JpaRepository</code>): persistência, filtro JPQL com parâmetros opcionais, agregações por causa, por mês e por rodovia, totais do recorte e lista de <code>idPrf</code> existentes.</div></div>
+    <div class="camada"><strong>Model</strong><div><code>Acidente</code>: entidade JPA com Bean Validation (mensagens em português) e índices em UF, data e classificação.</div></div>
+    <div class="camada banco"><strong>Banco</strong><div>PostgreSQL 18 no Neon (região sa-east-1), tabela <code>acidente</code> criada pelo Hibernate; credenciais lidas de variáveis de ambiente (<code>.env</code>).</div></div>
+  </div>
+
+  <h3>Fluxo da importação</h3>
+  <div class="fluxo">
+    <span class="forte">CSV oficial</span><b>→</b><span>input file + <code>FormData</code></span><b>→</b><span><code>POST /importar</code> (multipart)</span><b>→</b><span>Controller recebe <code>MultipartFile</code></span><b>→</b><span>ImportacaoService valida a estrutura</span><b>→</b><span>lê em ISO-8859-1 com Commons CSV</span><b>→</b><span>ConversorLinhaCsv + Validator</span><b>→</b><span>deduplica por <code>idPrf</code></span><b>→</b><span><code>saveAll</code> em lotes de 1.000</span><b>→</b><span class="forte">Neon</span><b>→</b><span>ResultadoImportacao (JSON)</span><b>→</b><span>tabela, contador e gráficos atualizados</span>
+  </div>
+  <h3>Fluxo de consulta</h3>
+  <div class="fluxo">
+    <span class="forte">Filtros na tela</span><b>→</b><span><code>fetch</code> em paralelo: <code>/filtro</code>, <code>/estatisticas/resumo</code>, <code>/causas</code>, <code>/mensal</code></span><b>→</b><span>Service monta a paginação</span><b>→</b><span>Repository executa JPQL com os mesmos critérios</span><b>→</b><span>DTOs (records) em JSON</span><b>→</b><span class="forte">tabela, KPIs e gráficos</span>
+  </div>
+
+  <h3>Organização do código</h3>
+<pre>src/main/java/br/edu/fatec/saarprf/
+├── model/        Acidente
+├── repository/   AcidenteRepository
+├── service/      AcidenteService, ImportacaoService, ConversorLinhaCsv, Normalizacao, LinhaInvalidaException
+├── controller/   AcidenteController
+├── dto/          PaginaResposta, FiltroAcidente, ResultadoImportacao, RejeicaoLinha, ContagemCausa,
+│                 ContagemMensal, ContagemRodovia, TotaisAcidentes, ResumoAcidentes, ErroResposta
+└── exception/    TratadorErros, ImportacaoException
+src/main/frontend/ts/   app.ts, inicio.ts, api.ts, tipos.ts, tabela.ts, formulario.ts, detalhe.ts,
+                        importacao.ts, graficos.ts, kpis.ts, mensagens.ts, formato.ts, constantes.ts, dom.ts
+src/main/resources/static/   index.html, painel.html, css/style.css, js/ (compilado), fonts/, img/
+src/main/resources/application.properties   (lê DB_URL, DB_USERNAME e DB_PASSWORD do ambiente)
+scripts/gerar_amostra.py     amostra programática e arquivos de carga</pre>
+</section>
+
+<!-- ===================== 7 ===================== -->
+<section class="capitulo">
+  <h2><span class="num">7</span>Dicionário da entidade <code>Acidente</code></h2>
+  <table class="legendada">
+    <caption>Atributos, tipos, obrigatoriedade, origem no CSV e regras de validação</caption>
+    <thead><tr><th>Atributo</th><th>Tipo Java</th><th>Obrig.</th><th>Origem</th><th>Regra de validação</th></tr></thead>
+    <tbody>
+      <tr><td><code>id</code></td><td>Long</td><td>gerado</td><td>—</td><td>SEQUENCE <code>acidente_seq</code> (allocationSize 1.000)</td></tr>
+      <tr><td><code>idPrf</code></td><td>Long</td><td>não</td><td><code>id</code></td><td>somente dígitos; UNIQUE; nulo em cadastro manual</td></tr>
+      <tr><td><code>dataOcorrencia</code></td><td>LocalDate</td><td>sim</td><td><code>data_inversa</code></td><td><code>@NotNull</code>, <code>@PastOrPresent</code> (não pode ser futura)</td></tr>
+      <tr><td><code>horario</code></td><td>LocalTime</td><td>sim</td><td><code>horario</code></td><td><code>@NotNull</code></td></tr>
+      <tr><td><code>uf</code></td><td>String(2)</td><td>sim</td><td><code>uf</code></td><td><code>@NotBlank</code>; uma das 27 UFs</td></tr>
+      <tr><td><code>municipio</code></td><td>String(60)</td><td>sim</td><td><code>municipio</code></td><td><code>@NotBlank</code>, até 60 caracteres; gravado em maiúsculas</td></tr>
+      <tr><td><code>rodovia</code></td><td>String(6)</td><td>sim</td><td><code>br</code></td><td>padrão <code>BR-(?!000)\d{3}</code> (ex.: BR-116; BR-000 rejeitada)</td></tr>
+      <tr><td><code>quilometro</code></td><td>BigDecimal(7,1)</td><td>sim</td><td><code>km</code></td><td>0 a 9.999,9</td></tr>
+      <tr><td><code>causaAcidente</code></td><td>String(120)</td><td>sim</td><td><code>causa_acidente</code></td><td><code>@NotBlank</code>, até 120 caracteres</td></tr>
+      <tr><td><code>tipoAcidente</code></td><td>String(60)</td><td>sim</td><td><code>tipo_acidente</code></td><td><code>@NotBlank</code>, até 60 caracteres</td></tr>
+      <tr><td><code>classificacao</code></td><td>String(25)</td><td>sim</td><td><code>classificacao_acidente</code></td><td>Sem Vítimas · Com Vítimas Feridas · Com Vítimas Fatais · Ignorado</td></tr>
+      <tr><td><code>mortos</code></td><td>Integer</td><td>sim</td><td><code>mortos</code></td><td><code>@Min(0)</code></td></tr>
+      <tr><td><code>feridos</code></td><td>Integer</td><td>sim</td><td><code>feridos</code></td><td><code>@Min(0)</code></td></tr>
+      <tr><td><code>latitude</code></td><td>BigDecimal(10,7)</td><td>sim</td><td><code>latitude</code></td><td>−34,0 a 6,0 (território brasileiro)</td></tr>
+      <tr><td><code>longitude</code></td><td>BigDecimal(10,7)</td><td>sim</td><td><code>longitude</code></td><td>−74,0 a −34,0 (território brasileiro)</td></tr>
+    </tbody>
+  </table>
+  <p>Os nomes seguem as sugestões do enunciado. Foram acrescentados <code>tipoAcidente</code>, <code>mortos</code>, <code>feridos</code>, <code>latitude</code> e <code>longitude</code>, que existem no conjunto oficial e enriquecem as análises (gravidade e localização), e <code>idPrf</code>, necessário para a política de reimportação sem duplicidade. As mesmas anotações de validação valem para o cadastro pela API e para cada linha importada: o <code>ImportacaoService</code> usa o <code>Validator</code> do Bean Validation antes de gravar.</p>
+</section>
+
+<!-- ===================== 8 ===================== -->
+<section class="capitulo">
+  <h2><span class="num">8</span>API REST</h2>
+  <table class="legendada">
+    <caption>Endpoints implementados (prefixo <code>/api/acidentes</code>)</caption>
+    <thead><tr><th>Método</th><th>Endpoint</th><th>Finalidade</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>GET</td><td><code>/api/acidentes?page=0&amp;size=50</code></td><td>Listar os registros (paginado, mais recentes primeiro)</td><td>200</td></tr>
+      <tr><td>GET</td><td><code>/api/acidentes/{id}</code></td><td>Buscar um registro por ID</td><td>200 / 404</td></tr>
+      <tr><td>POST</td><td><code>/api/acidentes</code></td><td>Cadastrar um registro</td><td>201 / 400</td></tr>
+      <tr><td>PUT</td><td><code>/api/acidentes/{id}</code></td><td>Atualizar um registro</td><td>200 / 400 / 404</td></tr>
+      <tr><td>DELETE</td><td><code>/api/acidentes/{id}</code></td><td>Excluir um registro</td><td>204 / 404</td></tr>
+      <tr><td>POST</td><td><code>/api/acidentes/importar</code></td><td>Importar CSV (multipart, campo <code>arquivo</code>)</td><td>200 / 400</td></tr>
+      <tr><td>GET</td><td><code>/api/acidentes/filtro?uf=&amp;classificacao=&amp;dataInicio=&amp;dataFim=</code></td><td>Filtrar por UF, classificação e período (critérios opcionais e combináveis)</td><td>200</td></tr>
+      <tr><td>GET</td><td><code>/api/acidentes/estatisticas/causas?(filtros)</code></td><td>Top 10 causas do recorte (gráfico de barras)</td><td>200</td></tr>
+      <tr><td>GET</td><td><code>/api/acidentes/estatisticas/mensal?(filtros)</code></td><td>Total por ano e mês (gráfico de linhas)</td><td>200</td></tr>
+      <tr><td>GET</td><td><code>/api/acidentes/estatisticas/resumo?(filtros)</code></td><td>Indicadores: total, óbitos, feridos, período e rodovia mais crítica</td><td>200</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Cadastro — <code>POST /api/acidentes</code> → 201 Created</h3>
+<pre>// requisição
+{ "dataOcorrencia": "2026-10-31", "horario": "07:45", "uf": "SP", "municipio": "São Paulo",
+  "rodovia": "BR-116", "quilometro": 230.5, "causaAcidente": "Reação tardia ou ineficiente do condutor",
+  "tipoAcidente": "Colisão traseira", "classificacao": "Com Vítimas Feridas", "mortos": 0, "feridos": 1,
+  "latitude": -23.5115, "longitude": -46.5832 }
+
+// resposta (cabeçalho Location: /api/acidentes/121004)
+{ "id": 121004, "idPrf": null, "dataOcorrencia": "2026-10-31", "horario": "07:45:00", "uf": "SP",
+  "municipio": "SÃO PAULO", "rodovia": "BR-116", "quilometro": 230.5, "causaAcidente": "Reação tardia ou ineficiente do condutor",
+  "tipoAcidente": "Colisão traseira", "classificacao": "Com Vítimas Feridas", "mortos": 0, "feridos": 1,
+  "latitude": -23.5115, "longitude": -46.5832 }</pre>
+
+  <h3>Erro de validação — 400 Bad Request</h3>
+<pre>// POST /api/acidentes com { "uf": "XX", "rodovia": "BR-000", "quilometro": -5, "latitude": 40, ... }
+{ "mensagem": "Dados inválidos",
+  "erros": { "uf": "UF inválida", "rodovia": "rodovia inválida: use o formato BR-000 (ex.: BR-116)",
+             "quilometro": "quilômetro não pode ser negativo", "latitude": "latitude fora do território brasileiro",
+             "horario": "horário é obrigatório", "municipio": "município é obrigatório", ... } }</pre>
+
+  <h3>Busca por ID inexistente — <code>GET /api/acidentes/999999999</code></h3>
+<pre>HTTP/1.1 404 Not Found      (corpo vazio; a interface exibe "Registro 999999999 não encontrado (HTTP 404).")</pre>
+
+  <h3>Filtro — <code>GET /api/acidentes/filtro?uf=SP&amp;classificacao=Com Vítimas Fatais&amp;size=2</code> → 200</h3>
+<pre>{ "conteudo": [ { "id": 84986, "idPrf": 796070, "dataOcorrencia": "2026-08-31", "horario": "06:00:00", "uf": "SP",
+                  "municipio": "VARGEM", "rodovia": "BR-381", "quilometro": 1.0, "causaAcidente": "Manobra de mudança de faixa",
+                  "tipoAcidente": "Colisão lateral mesmo sentido", "classificacao": "Com Vítimas Fatais", "mortos": 1, "feridos": 1,
+                  "latitude": -22.88197, "longitude": -46.38404 },
+                { "id": 84979, ... } ],
+  "pagina": 0, "tamanho": 2, "totalElementos": 326, "totalPaginas": 163 }</pre>
+
+  <h3>Importação — <code>POST /api/acidentes/importar</code> → 200 OK</h3>
+<pre>{ "arquivo": "amostra_demo_prf.csv", "linhasLidas": 1014, "importadas": 1006, "rejeitadas": 8, "duplicadas": 0,
+  "motivosRejeicao": { "classificação ausente": 2, "rodovia não identificada": 5, "id PRF inválido": 1 },
+  "exemplosRejeicao": [ { "linha": 2, "motivo": "classificação ausente" }, ... ],
+  "tempoMs": 876, "mensagem": "Importação concluída: 1006 registros importados." }</pre>
+  <h3>Importação inválida → 400 Bad Request</h3>
+<pre>{ "mensagem": "Separador incorreto: o arquivo deve usar ponto e vírgula (;) entre as colunas.", "erros": {} }</pre>
+
+  <h3>Resumo dos indicadores — <code>GET /api/acidentes/estatisticas/resumo</code> → 200</h3>
+<pre>{ "total": 119965, "mortos": 10073, "feridos": 138281, "dataInicial": "2025-01-01", "dataFinal": "2026-08-31",
+  "rodoviaMaisCritica": "BR-101", "ocorrenciasRodovia": 21231 }</pre>
+</section>
+
+<!-- ===================== 9 ===================== -->
+<section class="capitulo">
+  <h2><span class="num">9</span>Decisões técnicas</h2>
+  <h3><code>Optional</code></h3>
+  <p><code>AcidenteService.buscarPorId</code> e <code>atualizar</code> retornam <code>Optional&lt;Acidente&gt;</code>. O controller transforma o resultado com <code>map(ResponseEntity::ok).orElseGet(() -&gt; ResponseEntity.notFound().build())</code>, de modo que a ausência do registro vira 404 sem <code>null</code> e sem exceção. A exclusão retorna <code>boolean</code> (existia ou não) e o controller responde 204 ou 404.</p>
+  <h3><code>ResponseEntity</code> e códigos HTTP</h3>
+  <p>Todos os métodos do controller devolvem <code>ResponseEntity</code>: 200 nas consultas, 201 com cabeçalho <code>Location</code> no cadastro, 204 sem corpo na exclusão, 404 quando o ID não existe e 400 para validação e importação. O <code>TratadorErros</code> padroniza o corpo de erro (<code>ErroResposta</code>: mensagem geral + mapa campo → mensagem), que a interface usa para destacar os campos inválidos do formulário.</p>
+  <h3>Tipos</h3>
+  <p><code>LocalDate</code> e <code>LocalTime</code> evitam fuso horário e conversões de texto; <code>BigDecimal</code> com precisão definida guarda km e coordenadas sem erro de arredondamento de ponto flutuante; <code>Integer</code> para contagens. Rodovia é <code>String</code> no formato <code>BR-116</code>, como aparece em placas e boletins. Nas respostas, DTOs são <code>records</code> Java imutáveis.</p>
+  <h3>Importação</h3>
+  <ul>
+    <li><strong>Leitura em fluxo</strong> (<code>BufferedReader</code> + Commons CSV) em ISO-8859-1, sem carregar o arquivo inteiro na memória.</li>
+    <li><strong>Lógica no Service:</strong> o controller apenas repassa o <code>MultipartFile</code>; validação estrutural, conversão, deduplicação e gravação ficam no <code>ImportacaoService</code>, e a conversão de uma linha fica isolada no <code>ConversorLinhaCsv</code>, testável sem banco.</li>
+    <li><strong>Desempenho:</strong> <code>saveAll</code> em lotes de 1.000 com <code>flush()</code>/<code>clear()</code>, <code>hibernate.jdbc.batch_size=1000</code>, <code>reWriteBatchedInserts=true</code> no driver e sequence com <code>allocationSize=1000</code> (um acesso à sequence a cada mil ids). Resultado medido: 71.924 linhas em 13,2 s e 48.303 linhas em 8,5 s até o Neon em São Paulo.</li>
+    <li><strong>Transação única:</strong> se ocorrer erro inesperado, nada é gravado parcialmente.</li>
+  </ul>
+  <h3>Filtros</h3>
+  <p>Três critérios combináveis — UF, classificação e período (data inicial e final) — numa única consulta JPQL em que cada parâmetro é opcional (<code>(:uf is null or a.uf = :uf)</code>). Para datas no PostgreSQL foi necessário <code>cast(:dataInicio as LocalDate) is null</code>, pois o driver não infere o tipo de um parâmetro nulo. O filtro é paginado e ordenado por data e horário decrescentes, e os mesmos critérios alimentam os indicadores e os dois gráficos. Índices em <code>uf</code>, <code>data_ocorrencia</code> e <code>classificacao</code> mantêm as consultas rápidas sobre 120 mil linhas.</p>
+  <h3>Gráficos: perguntas de negócio</h3>
+  <table class="legendada">
+    <caption>Perguntas respondidas, agrupamento e justificativa do tipo de gráfico</caption>
+    <thead><tr><th style="width:24%">Gráfico</th><th>Pergunta</th><th>Agrupamento (API)</th><th>Por que esse tipo</th></tr></thead>
+    <tbody>
+      <tr><td>Top 10 causas — barras horizontais</td><td>Quais são as principais causas de acidentes no recorte escolhido?</td><td><code>group by causaAcidente</code>, ordenado por contagem, 10 primeiras; percentual sobre o total do recorte</td><td>Barras horizontais comparam magnitudes entre categorias e acomodam nomes longos de causas, já ordenadas do maior para o menor.</td></tr>
+      <tr><td>Evolução mensal — linhas 2025 × 2026</td><td>Como os acidentes evoluem mês a mês e como 2026 se compara a 2025?</td><td><code>group by year, month</code> da data; uma série por ano</td><td>Linhas mostram tendência temporal; sobrepor os anos no mesmo eixo de meses permite a comparação direta do mesmo período.</td></tr>
+    </tbody>
+  </table>
+  <p><strong>Interpretação com a base completa:</strong> as duas maiores causas — “ausência de reação do condutor” (19.094; 15,9%) e “reação tardia ou ineficiente do condutor” (18.013; 15,0%) — somam quase um terço das ocorrências e apontam para a atenção do condutor, à frente de velocidade (5,5%) e álcool (5,0%). No gráfico mensal, de janeiro a agosto houve 46.737 acidentes em 2025 e 48.207 em 2026 (+3,1%), com 2026 acima de 2025 em todos os meses. Fevereiro tem o menor volume nos dois anos, e dezembro de 2025 tem o pico (6.720). Os indicadores complementam: 10.073 óbitos (84 por mil acidentes) e a BR-101 como rodovia com mais ocorrências (21.231; 17,7%).</p>
+  <h3>Segurança</h3>
+  <ul>
+    <li><code>application.properties</code> só referencia <code>${DB_URL}</code>, <code>${DB_USERNAME}</code> e <code>${DB_PASSWORD}</code>; os valores ficam no <code>.env</code>, importado por <code>spring.config.import=optional:file:.env[.properties]</code>.</li>
+    <li><code>.env</code> está no <code>.gitignore</code>; o repositório traz <code>.env.example</code> sem valores. O histórico do Git foi verificado: nenhuma credencial foi enviada.</li>
+    <li>Conexão com o endpoint <strong>direto</strong> do Neon (sem <code>-pooler</code>): o Spring já tem pool próprio (HikariCP), e o Hibernate precisa de sessão direta para criar e atualizar o schema.</li>
+  </ul>
+  <h3>Interface</h3>
+  <p>TypeScript, compilado por <code>tsc</code> para ES modules, tipa os contratos da API (<code>tipos.ts</code>) e evita erros de campo na integração. O JavaScript compilado é versionado, então a aplicação roda só com <code>./mvnw spring-boot:run</code>, sem Node. Chart.js, fontes e ícones são servidos localmente, o que permite apresentar sem depender de CDN. Os formulários e detalhes usam <code>&lt;dialog&gt;</code> nativo, e as mensagens de sucesso e erro são exibidas em <em>toasts</em> sobre a página.</p>
+</section>
+
+<!-- ===================== 10 ===================== -->
+<section class="capitulo">
+  <h2><span class="num">10</span>Evidências</h2>
+  <p>As capturas abaixo foram feitas em 31/10/2026 com a aplicação conectada ao Neon, a partir de um roteiro automatizado no navegador (Microsoft Edge) que executou cada funcionalidade pela interface. Os registros de teste criados foram excluídos ao final, e a base voltou a 119.965 ocorrências.</p>
+
+  <figure><img src="img/01-pagina-inicial.png"><figcaption>Página inicial (<code>index.html</code>). Os três destaques — total de acidentes, vidas perdidas e rodovia com mais acidentes — e o período da base são obtidos da API (<code>/estatisticas/resumo</code>) ao carregar a página.</figcaption></figure>
+
+  <figure><img src="img/02b-painel-topo.png"><figcaption>Painel analítico carregado: contador de registros (119.965), filtros, busca por ID, os quatro indicadores e o início dos gráficos, todos calculados pela API sobre os dados persistidos no Neon.</figcaption></figure>
+
+  <figure><img src="img/02d-tabela.png"><figcaption>Tabela de ocorrências preenchida pela API (<code>GET /api/acidentes?page=0&amp;size=50</code>), com ID clicável para o detalhe, etiqueta de gravidade e ações de editar e excluir em cada linha.</figcaption></figure>
+  <figure><img src="img/02f-paginacao.png"><figcaption>Rodapé da tabela com a paginação: 50 registros por página, 2.400 páginas no total.</figcaption></figure>
+
+  <figure><img src="img/02c-graficos.png"><figcaption>Gráficos com a base completa. À esquerda, evolução mensal: 2026 (linha azul) acima de 2025 (tracejada) em todos os meses de janeiro a agosto. À direita, as 10 principais causas, lideradas pelas falhas de reação do condutor.</figcaption></figure>
+
+  <figure><img src="img/03b-filtro-topo.png"><figcaption>Filtros aplicados: UF = SP e classificação = Com Vítimas Fatais. Os critérios ativos aparecem no canto superior direito, o contador indica “326 no filtro” e os indicadores são recalculados para o recorte (356 óbitos).</figcaption></figure>
+  <figure><img src="img/03c-filtro-graficos.png"><figcaption>Gráficos do mesmo recorte (SP, acidentes fatais): a curva mensal e o ranking de causas mudam com o filtro. Nos acidentes fatais em SP, causas ligadas a pedestres (“pedestre andava na pista”, “entrada inopinada do pedestre”, “pedestre cruzava a pista fora da faixa”) ganham peso.</figcaption></figure>
+  <figure><img src="img/03d-filtro-tabela.png"><figcaption>Tabela filtrada: apenas ocorrências de SP com vítimas fatais (<code>GET /api/acidentes/filtro?uf=SP&amp;classificacao=Com Vítimas Fatais</code>).</figcaption></figure>
+
+  <figure><img src="img/04-detalhe-busca-id.png"><figcaption>Busca por ID existente (85025): o detalhe completo do registro é exibido, com acesso direto à edição.</figcaption></figure>
+  <figure><img src="img/05-busca-404.png"><figcaption>Busca por ID inexistente (999999999): a API responde 404 e a interface exibe a mensagem de erro no canto inferior direito.</figcaption></figure>
+
+  <figure><img src="img/07a-cadastro-formulario.png"><figcaption>Cadastro: formulário de novo registro preenchido, com UF e classificação em listas fechadas e sugestões de causa e tipo.</figcaption></figure>
+  <figure><img src="img/07b-cadastro-sucesso.png"><figcaption>Cadastro concluído (HTTP 201): mensagem de sucesso “Registro #121004 cadastrado.”, contador em 119.966 e o novo registro no topo da tabela, com o município padronizado em maiúsculas.</figcaption></figure>
+  <figure><img src="img/06-cadastro-invalido.png"><figcaption>Exemplo de erro de validação (HTTP 400): campos inválidos destacados em vermelho e mensagem com os motivos devolvidos pela API (rodovia BR-000, km negativo, coordenadas fora do Brasil, campos obrigatórios).</figcaption></figure>
+  <figure><img src="img/08a-edicao-formulario.png"><figcaption>Edição: formulário preenchido com os dados do registro #121004, alterando horário para 08:10 e feridos para 3.</figcaption></figure>
+  <figure><img src="img/08b-edicao-sucesso.png"><figcaption>Edição concluída (HTTP 200): mensagem “Registro #121004 atualizado.” e a linha da tabela já com os novos valores.</figcaption></figure>
+  <figure><img src="img/09-exclusao-sucesso.png"><figcaption>Exclusão concluída (HTTP 204) após confirmação: mensagem “Registro #121004 excluído.”, o registro sai da tabela e o contador volta a 119.965. Uma nova busca pelo mesmo ID retorna 404.</figcaption></figure>
+
+  <figure><img src="img/12-importacao-valida.png"><figcaption>Seleção e importação de um arquivo válido com 8 linhas reais da amostra: 6 importadas e 2 rejeitadas, com os motivos (rodovia não identificada e classificação ausente) e o número da linha de cada rejeição.</figcaption></figure>
+  <figure><img src="img/10-importacao-invalida.png"><figcaption>Importação inválida (HTTP 400): arquivo com vírgula como separador é recusado antes de qualquer gravação, com a mensagem explicando o erro estrutural.</figcaption></figure>
+  <figure><img src="img/11-importacao-reimportacao.png"><figcaption>Reimportação de 20 linhas já existentes na base: 0 importadas e 20 duplicadas, comprovando a política de reimportação sem duplicidade.</figcaption></figure>
+
+  <figure class="opcional"><img src="img/neon-console.png"><figcaption>Console do Neon (Tables): tabela <code>acidente</code> com os registros importados.</figcaption></figure>
+  <figure>
+<pre class="terminal">{{NEON}}</pre>
+    <figcaption>Consulta direta ao banco PostgreSQL publicado no Neon (31/10/2026): 119.965 registros, 27 UFs, período de 01/01/2025 a 31/08/2026, estrutura da tabela <code>acidente</code>, últimos registros, distribuição por UF e índices (incluindo o UNIQUE de <code>id_prf</code>). O identificador do endpoint foi ocultado.</figcaption>
+  </figure>
+
+  <h3>Testes dos endpoints no Insomnia</h3>
+  <p>A coleção usada está no repositório em <code>docs/insomnia/saar-prf-insomnia.json</code> (17 requisições cobrindo todos os endpoints e os status 200, 201, 204, 400 e 404 descritos na seção 8). Para usá-la: Insomnia → Import → arquivo da coleção; após o cadastro, copie o <code>id</code> retornado para a variável <code>id_teste</code> do ambiente.</p>
+  <figure><img src="img/insomnia-01.png"><figcaption>Insomnia — <code>GET /api/acidentes/{id}</code> com ID existente (200) e lista de requisições da coleção.</figcaption></figure>
+  <figure><img src="img/insomnia-02.png"><figcaption>Insomnia — <code>GET /api/acidentes/999999999</code>: retorno 404 para ID inexistente.</figcaption></figure>
+  <figure><img src="img/insomnia-03.png"><figcaption>Insomnia — <code>POST /api/acidentes</code> com registro válido: 201 Created, com o <code>id</code> gerado, <code>idPrf</code> nulo (cadastro manual) e o município padronizado em maiúsculas.</figcaption></figure>
+  <figure><img src="img/insomnia-04.png"><figcaption>Insomnia — <code>POST /api/acidentes</code> com dados inválidos (data futura, UF “XX”, BR-000, km e mortos negativos, coordenadas fora do Brasil): 400 Bad Request com a mensagem de cada campo.</figcaption></figure>
+</section>
+
+<!-- ===================== 11 ===================== -->
+<section class="capitulo">
+  <h2><span class="num">11</span>Testes</h2>
+  <h3>Testes ponta a ponta (API + Neon + interface)</h3>
+  <table class="legendada">
+    <caption>Casos executados em 31/10/2026 contra o banco no Neon (exceto quando indicado)</caption>
+    <thead><tr><th>#</th><th>Entrada ou ação</th><th>Resultado esperado</th><th>Resultado obtido</th><th>Situação</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><code>GET /api/acidentes?page=0&amp;size=5</code></td><td>200 com página e total</td><td>200; 5 itens; totalElementos 119.965</td><td class="ok">OK</td></tr>
+      <tr><td>2</td><td><code>GET /api/acidentes/85025</code></td><td>200 com o registro</td><td>200; registro #85025</td><td class="ok">OK</td></tr>
+      <tr><td>3</td><td><code>GET /api/acidentes/999999999</code></td><td>404</td><td>404</td><td class="ok">OK</td></tr>
+      <tr><td>4</td><td><code>POST</code> com registro válido</td><td>201 com id gerado</td><td>201; id 121002</td><td class="ok">OK</td></tr>
+      <tr><td>5</td><td><code>POST</code> com UF “XX”, BR-000 e campos vazios</td><td>400 com erros por campo</td><td>400; “Dados inválidos” + 13 erros</td><td class="ok">OK</td></tr>
+      <tr><td>6</td><td><code>PUT</code> válido (feridos 1 → 2)</td><td>200 com o registro alterado</td><td>200; feridos = 2</td><td class="ok">OK</td></tr>
+      <tr><td>7</td><td><code>PUT</code> com UF inválida</td><td>400</td><td>400</td><td class="ok">OK</td></tr>
+      <tr><td>8</td><td><code>PUT /999999999</code></td><td>404</td><td>404</td><td class="ok">OK</td></tr>
+      <tr><td>9</td><td><code>DELETE</code> do registro criado; busca e nova exclusão</td><td>204; depois 404 e 404</td><td>204; 404; 404</td><td class="ok">OK</td></tr>
+      <tr><td>10</td><td><code>GET /filtro?uf=SP</code></td><td>200 só com SP</td><td>200; 7.594 registros</td><td class="ok">OK</td></tr>
+      <tr><td>11</td><td><code>GET /filtro</code> MG + Com Vítimas Fatais + 01/01 a 30/06/2025</td><td>200 com os critérios combinados</td><td>200; 322 registros</td><td class="ok">OK</td></tr>
+      <tr><td>12</td><td>Importar <code>invalido_vazio.csv</code></td><td>400 “Arquivo vazio”</td><td>400; mensagem exibida</td><td class="ok">OK</td></tr>
+      <tr><td>13</td><td>Importar <code>invalido_sem_cabecalho.csv</code></td><td>400 com as colunas faltantes</td><td>400; lista as 14 colunas</td><td class="ok">OK</td></tr>
+      <tr><td>14</td><td>Importar <code>invalido_separador_virgula.csv</code></td><td>400 “Separador incorreto”</td><td>400; mensagem exibida</td><td class="ok">OK</td></tr>
+      <tr><td>15</td><td>Importar 8 linhas reais (6 válidas, 1 <code>br=0</code>, 1 <code>NA</code>)</td><td>200; 8 lidas, 6 importadas, 2 rejeitadas</td><td>200; 8 / 6 / 2 / 0 com motivos</td><td class="ok">OK</td></tr>
+      <tr><td>16</td><td>Reimportar 20 linhas já gravadas</td><td>0 importadas, 20 duplicadas</td><td>0 importadas, 20 duplicadas, 0,2 s</td><td class="ok">OK</td></tr>
+      <tr><td>17</td><td>Importar a amostra (25/10/2026) e reimportá-la</td><td>1.014 / 1.006 / 8 / 0; depois 1.006 duplicadas</td><td>conforme esperado; 0,9 s</td><td class="ok">OK</td></tr>
+      <tr><td>18</td><td>Carga completa (25/10/2026)</td><td>todas as linhas válidas gravadas</td><td>119.965 registros; 13,2 s (2025) e 8,5 s (2026)</td><td class="ok">OK</td></tr>
+      <tr><td>19</td><td>Interface: filtros, limpar filtros, recorte vazio, paginação</td><td>tabela, contador, KPIs e gráficos atualizam juntos</td><td>conforme esperado; recorte vazio mostra “Nenhum registro encontrado.”</td><td class="ok">OK</td></tr>
+      <tr><td>20</td><td>Interface: busca por ID (existente, inexistente, vazio, tecla Enter)</td><td>detalhe; 404; “Informe um ID válido.”</td><td>conforme esperado</td><td class="ok">OK</td></tr>
+      <tr><td>21</td><td>Interface: cadastrar, editar pelo detalhe e excluir</td><td>mensagens de sucesso e tabela atualizada</td><td>conforme esperado; contador 119.965 → 119.966 → 119.965</td><td class="ok">OK</td></tr>
+      <tr><td>22</td><td>Recarregar a página</td><td>dados permanecem (persistência no Neon)</td><td>119.965 registros após recarregar</td><td class="ok">OK</td></tr>
+      <tr><td>23</td><td>Larguras de 390, 768, 1024, 1280 e 1440 px</td><td>sem rolagem horizontal</td><td>sem rolagem horizontal nas duas páginas</td><td class="ok">OK</td></tr>
+      <tr><td>24</td><td>Mensagem de erro com o formulário aberto</td><td>mensagem legível sobre o dialog</td><td>falhava (mensagem atrás do fundo do modal); corrigido em 31/10 e retestado</td><td class="ok">OK</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Testes automatizados</h3>
+  <p><code>./mvnw test</code> executa 62 testes (JUnit 5 e Mockito), todos aprovados. Os testes de serviço usam o repositório simulado (mock), e os do controller usam <code>@WebMvcTest</code> com <code>MockMvc</code>, sem depender do banco.</p>
+  <table class="legendada">
+    <caption>Resumo dos testes automatizados</caption>
+    <thead><tr><th>Classe</th><th class="num">Testes</th><th>O que verifica</th><th>Situação</th></tr></thead>
+    <tbody>
+      <tr><td><code>ConversorLinhaCsvTest</code></td><td class="num">17</td><td>linha válida; BR com dois dígitos; km com vírgula e ponto; data <code>dd/mm/aaaa</code>; espaços; rejeição de <code>8e+05</code>, <code>NA</code>, <code>br=0</code>, BR não numérica, data, horário, latitude e mortos inválidos</td><td class="ok">OK</td></tr>
+      <tr><td><code>ValidacaoAcidenteTest</code></td><td class="num">12</td><td>UF, classificação, formato da rodovia, BR-000, km 0 aceito, km negativo e acima do limite, coordenadas fora do Brasil, data futura, obrigatórios</td><td class="ok">OK</td></tr>
+      <tr><td><code>ImportacaoServiceTest</code></td><td class="num">11</td><td>contagem de importadas, rejeitadas e duplicadas; reimportação; arquivo vazio; extensão; separador; sem cabeçalho; só cabeçalho; coluna sem nome; aspas quebradas; lotes de mil</td><td class="ok">OK</td></tr>
+      <tr><td><code>AcidenteServiceTest</code></td><td class="num">7</td><td>cadastro ignora ids enviados e normaliza texto; atualização preserva id e idPrf; inexistentes; exclusão; resumo e rodovia mais crítica</td><td class="ok">OK</td></tr>
+      <tr><td><code>AcidenteControllerTest</code></td><td class="num">15</td><td>status 200, 201 (com <code>Location</code>), 204, 400 e 404 de todos os endpoints; filtros e estatísticas</td><td class="ok">OK</td></tr>
+      <tr><td><strong>Total</strong></td><td class="num"><strong>62</strong></td><td>0 falhas, 0 erros</td><td class="ok">OK</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ===================== 12 ===================== -->
+<section class="capitulo">
+  <h2><span class="num">12</span>Dificuldades, limitações e melhorias</h2>
+  <table class="legendada">
+    <caption>Problemas enfrentados, causas e soluções</caption>
+    <thead><tr><th style="width:24%">Problema</th><th>Causa</th><th>Solução</th></tr></thead>
+    <tbody>
+      <tr><td>Arquivo diferente do dicionário</td><td>Datas em <code>aaaa-mm-dd</code>, decimal com vírgula e km 0, ao contrário do documentado</td><td>Conversor aceita os dois formatos; km 0 aceito, com a decisão documentada no código</td></tr>
+      <tr><td>Id em notação científica</td><td>Linha corrompida por planilha antes da publicação (<code>8e+05</code>)</td><td>Rejeitada com motivo: o valor original não é recuperável</td></tr>
+      <tr><td>Rodovia não identificada</td><td>A PRF usa <code>br = 0</code> como marcador</td><td>Rejeição explícita (“rodovia não identificada”), contabilizada no resultado</td></tr>
+      <tr><td>Texto com acentos corrompido</td><td>Arquivos publicados em ISO-8859-1, não UTF-8</td><td>Leitura em ISO-8859-1; arquivo com BOM UTF-8 é recusado com mensagem clara</td></tr>
+      <tr><td>Importação lenta</td><td>Um <code>INSERT</code> e um acesso à sequence por registro</td><td>Lotes de 1.000, <code>reWriteBatchedInserts</code> e sequence com <code>allocationSize</code> 1.000: ~72 mil linhas em 13 s</td></tr>
+      <tr><td>Filtro de datas falhava no PostgreSQL</td><td>Parâmetro nulo sem tipo em <code>:data is null</code></td><td><code>cast(:dataInicio as LocalDate) is null</code> na JPQL</td></tr>
+      <tr><td>Conexão instável com o Neon</td><td>Endpoint com <em>pooler</em> conflitando com o pool do Spring e com a criação do schema</td><td>Uso do endpoint direto, com o HikariCP do Spring</td></tr>
+      <tr><td>Demonstrar importação com a base já carregada</td><td>Reimportar dados já gravados só gera duplicados</td><td>Amostra estratificada separada da carga prévia pelo script, reservada para a apresentação</td></tr>
+      <tr><td>Licença dos dados</td><td>CC BY-ND não permite redistribuir obras derivadas</td><td>CSVs fora do GitHub; script reproduz amostra e carga a partir dos arquivos oficiais</td></tr>
+      <tr><td>Painel mais largo que a tela</td><td>Itens de grid com largura mínima implícita</td><td><code>min-width: 0</code> nos blocos do layout; verificado de 390 a 1440 px</td></tr>
+      <tr><td>Mensagem escondida com formulário aberto</td><td><code>&lt;dialog&gt;</code> modal fica acima de qualquer <code>z-index</code></td><td>Contêiner de mensagens como <em>popover</em>, reaberto a cada mensagem para ficar acima do dialog</td></tr>
+    </tbody>
+  </table>
+  <h3>Limitações</h3>
+  <ul>
+    <li>Sem autenticação: qualquer usuário com acesso à aplicação pode alterar ou excluir registros.</li>
+    <li>As análises usam 13 das 30 colunas; condições da via, clima e veículos não estão disponíveis para filtro.</li>
+    <li>A deduplicação usa o <code>id</code> da PRF; registros cadastrados manualmente não são comparados entre si.</li>
+    <li>A base cobre 2025 e 2026 (até agosto); anos anteriores exigem nova importação.</li>
+  </ul>
+  <h3>Melhorias futuras</h3>
+  <ul>
+    <li>Mapa de calor com latitude e longitude para localizar trechos críticos por km.</li>
+    <li>Filtros por rodovia, município e causa; exportação do recorte em CSV.</li>
+    <li>Autenticação com perfis de leitura e de manutenção.</li>
+    <li>Testes de integração com PostgreSQL real (Testcontainers) e implantação em nuvem.</li>
+  </ul>
+</section>
+
+<!-- ===================== 13 ===================== -->
+<section class="capitulo">
+  <h2><span class="num">13</span>GitHub e commit final</h2>
+  <table>
+    <tbody>
+      <tr><th style="width:28%">Repositório</th><td><a href="https://github.com/c4io-rosa-dev/SAAR_PRF-P2">https://github.com/c4io-rosa-dev/SAAR_PRF-P2</a></td></tr>
+      <tr><th>Branch</th><td><code>main</code></td></tr>
+      <tr><th>Commit final avaliado</th><td><code>{{COMMIT}}</code></td></tr>
+      <tr><th>Data do commit</th><td>{{DATA_COMMIT}}</td></tr>
+      <tr><th>Link do commit</th><td><a href="https://github.com/c4io-rosa-dev/SAAR_PRF-P2/commit/{{COMMIT}}">github.com/c4io-rosa-dev/SAAR_PRF-P2/commit/{{COMMIT_CURTO}}</a></td></tr>
+    </tbody>
+  </table>
+  <h3>Conteúdo do repositório</h3>
+  <ul>
+    <li>Código-fonte completo (back-end Java, front-end TypeScript e JavaScript compilado), <code>pom.xml</code> e Maven Wrapper.</li>
+    <li><code>README.md</code> com objetivo, fonte dos dados, requisitos, configuração, execução, tabela de endpoints, exemplos de JSON, regras de importação e integrantes.</li>
+    <li><code>.env.example</code> sem credenciais e <code>.gitignore</code> com <code>.env</code>, dados brutos, amostra e carga.</li>
+    <li><code>scripts/gerar_amostra.py</code> e instruções para obter os arquivos oficiais; arquivos de teste de importação inválida em <code>dados/testes/</code>.</li>
+    <li>Coleção do Insomnia (<code>docs/insomnia/</code>), especificação e plano (<code>docs/superpowers/</code>), referências de design (<code>docs/design/</code>) e o código-fonte deste relatório (<code>docs/relatorio/</code>).</li>
+  </ul>
+  <h3>Como executar</h3>
+<pre>1. Baixar datatran2025.zip e datatran2026.zip no portal da PRF e extrair os CSVs em dados/brutos/
+2. python scripts/gerar_amostra.py            (gera amostra, carga e arquivos de teste)
+3. Copiar .env.example para .env e preencher DB_URL, DB_USERNAME e DB_PASSWORD (Neon, endpoint direto)
+4. ./mvnw spring-boot:run                       (a tabela acidente é criada na primeira execução)
+5. Abrir http://localhost:8080 (página inicial) ou http://localhost:8080/painel.html
+6. Testes: ./mvnw test</pre>
+</section>
+
+</body>
+</html>

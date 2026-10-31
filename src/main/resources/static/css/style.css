@@ -521,7 +521,19 @@ td.acoes { text-align: right; }
 
 /* ---------- mensagens ---------- */
 
-.toasts { position: fixed; right: 20px; bottom: 20px; z-index: 50; display: grid; gap: 8px; }
+.toasts {
+  position: fixed;
+  inset: auto 20px 20px auto;
+  z-index: 50;
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  overflow: visible;
+}
 
 .toast {
   max-width: 440px;

@@ -2,7 +2,7 @@
 
 Aplicação web para importar, consultar, alterar, excluir, filtrar e visualizar os acidentes em rodovias federais publicados pela Polícia Rodoviária Federal.
 
-Projeto 03 · Programação Avançada Orientada a Objetos · FATEC Ipiranga · Grupo 03
+Projeto 03 · Programação Avançada Orientada a Objetos · FATEC Ipiranga · Grupo 02
 
 ## Fonte dos dados
 
@@ -112,6 +112,22 @@ Resultado de importação (200):
 
 Medições com o Neon (região sa-east-1): carga de 2025 (71.924 linhas) em 13,2 s; carga de 2026 (48.303 linhas) em 8,5 s; amostra (1.014 linhas) em 0,9 s.
 
+## Testes no Insomnia
+
+A coleção `docs/insomnia/saar-prf-insomnia.json` tem 17 requisições (todos os endpoints, com os status 200, 201, 204, 400 e 404). Importe no Insomnia e, depois do cadastro, copie o `id` retornado para a variável `id_teste` do ambiente.
+
+## Relatório técnico
+
+O relatório é gerado a partir de `docs/relatorio/relatorio.html`, com as capturas em `docs/relatorio/img/`. Depois do último commit, rode:
+
+```bash
+python docs/relatorio/gerar_pdf.py
+```
+
+O script cita o commit atual (HEAD) e gera `docs/relatorio/Relatorio_Tecnico_SAAR_PRF_Grupo02.pdf` com o Edge ou o Chrome.
+
 ## Integrantes
 
-- (preencher)
+- Caio Rosa
+- Guilherme Dino
+- Samuel Goes

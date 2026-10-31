@@ -1,0 +1,445 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-10-31T00:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v13.1.0",
+  "resources": [
+    {
+      "_id": "wrk_saarprf",
+      "_type": "workspace",
+      "parentId": null,
+      "name": "SAAR PRF — API REST",
+      "description": "Projeto 03 · Grupo 02 · FATEC Ipiranga",
+      "scope": "collection"
+    },
+    {
+      "_id": "env_saarprf",
+      "_type": "environment",
+      "parentId": "wrk_saarprf",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:8080/api/acidentes",
+        "id_teste": "0"
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "base_url",
+          "id_teste"
+        ]
+      }
+    },
+    {
+      "_id": "fld_saarprf",
+      "_type": "request_group",
+      "parentId": "wrk_saarprf",
+      "name": "Acidentes",
+      "description": "",
+      "metaSortKey": -1
+    },
+    {
+      "_id": "req_saarprf_01",
+      "_type": "request",
+      "parentId": "fld_saarprf",
+      "name": "01 Listar (paginado) — 200",
+      "method": "GET",
+      "url": "{{ _.base_url }}?page=0&size=5",
+      "description": "",
+      "headers": [],
+      "body": {},
+      "metaSortKey": -999,
+      "parameters": [],
+      "authentication": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_saarprf_02",
+      "_type": "request",
+      "parentId": "fld_saarprf",
+      "name": "02 Buscar por ID existente — 200",
+      "method": "GET",
+      "url": "{{ _.base_url }}/85025",
+      "description": "",
+      "headers": [],
+      "body": {},
+      "metaSortKey": -998,
+      "parameters": [],
+      "authentication": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_saarprf_03",
+      "_type": "request",
+      "parentId": "fld_saarprf",
+      "name": "03 Buscar por ID inexistente — 404",
+      "method": "GET",
+      "url": "{{ _.base_url }}/999999999",
+      "description": "",
+      "headers": [],
+      "body": {},
+      "metaSortKey": -997,
+      "parameters": [],
+      "authentication": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_saarprf_04",
+      "_type": "request",
+      "parentId": "fld_saarprf",
+      "name": "04 Cadastrar registro válido — 201",
+      "method": "POST",
+      "url": "{{ _.base_url }}",
+      "description": "Copie o id da resposta para a variável id_teste do ambiente.",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"dataOcorrencia\": \"2026-10-31\",\n  \"horario\": \"07:45\",\n  \"uf\": \"SP\",\n  \"municipio\": \"São Paulo\",\n  \"rodovia\": \"BR-116\",\n  \"quilometro\": 230.5,\n  \"causaAcidente\": \"Reação tardia ou ineficiente do condutor\",\n  \"tipoAcidente\": \"Colisão traseira\",\n  \"classificacao\": \"Com Vítimas Feridas\",\n  \"mortos\": 0,\n  \"feridos\": 1,\n  \"latitude\": -23.5115,\n  \"longitude\": -46.5832\n}"
+      },
+      "metaSortKey": -996,
+      "parameters": [],
+      "authentication": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_saarprf_05",
+      "_type": "request",
+      "parentId": "fld_saarprf",
+      "name": "05 Cadastrar registro inválido — 400",
+      "method": "POST",
+      "url": "{{ _.base_url }}",
+      "description": "",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"dataOcorrencia\": \"2030-01-01\",\n  \"uf\": \"XX\",\n  \"municipio\": \"\",\n  \"rodovia\": \"BR-000\",\n  \"quilometro\": -5,\n  \"classificacao\": \"Grave\",\n  \"mortos\": -1,\n  \"latitude\": 40,\n  \"longitude\": -10\n}"
+      },
+      "metaSortKey": -995,
+      "parameters": [],
+      "authentication": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_saarprf_06",
+      "_type": "request",
+      "parentId": "fld_saarprf",
+      "name": "06 Atualizar registro — 200",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/{{ _.id_teste }}",
+      "description": "",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"dataOcorrencia\": \"2026-10-31\",\n  \"horario\": \"08:10\",\n  \"uf\": \"SP\",\n  \"municipio\": \"São Paulo\",\n  \"rodovia\": \"BR-116\",\n  \"quilometro\": 230.5,\n  \"causaAcidente\": \"Reação tardia ou ineficiente do condutor\",\n  \"tipoAcidente\": \"Colisão traseira\",\n  \"classificacao\": \"Com Vítimas Feridas\",\n  \"mortos\": 0,\n  \"feridos\": 3,\n  \"latitude\": -23.5115,\n  \"longitude\": -46.5832\n}"
+      },
+      "metaSortKey": -994,
+      "parameters": [],
+      "authentication": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_saarprf_07",
+      "_type": "request",
+      "parentId": "fld_saarprf",
+      "name": "07 Atualizar com dados inválidos — 400",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/{{ _.id_teste }}",
+      "description": "",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"dataOcorrencia\": \"2030-01-01\",\n  \"uf\": \"XX\",\n  \"municipio\": \"\",\n  \"rodovia\": \"BR-000\",\n  \"quilometro\": -5,\n  \"classificacao\": \"Grave\",\n  \"mortos\": -1,\n  \"latitude\": 40,\n  \"longitude\": -10\n}"
+      },
+      "metaSortKey": -993,
+      "parameters": [],
+      "authentication": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_saarprf_08",
+      "_type": "request",
+      "parentId": "fld_saarprf",
+      "name": "08 Atualizar ID inexistente — 404",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/999999999",
+      "description": "",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"dataOcorrencia\": \"2026-10-31\",\n  \"horario\": \"07:45\",\n  \"uf\": \"SP\",\n  \"municipio\": \"São Paulo\",\n  \"rodovia\": \"BR-116\",\n  \"quilometro\": 230.5,\n  \"causaAcidente\": \"Reação tardia ou ineficiente do condutor\",\n  \"tipoAcidente\": \"Colisão traseira\",\n  \"classificacao\": \"Com Vítimas Feridas\",\n  \"mortos\": 0,\n  \"feridos\": 1,\n  \"latitude\": -23.5115,\n  \"longitude\": -46.5832\n}"
+      },
+      "metaSortKey": -992,
+      "parameters": [],
+      "authentication": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_saarprf_09",
+      "_type": "request",
+      "parentId": "fld_saarprf",
+      "name": "09 Excluir registro — 204",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/{{ _.id_teste }}",
+      "description": "",
+      "headers": [],
+      "body": {},
+      "metaSortKey": -991,
+      "parameters": [],
+      "authentication": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_saarprf_10",
+      "_type": "request",
+      "parentId": "fld_saarprf",
+      "name": "10 Excluir ID inexistente — 404",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/999999999",
+      "description": "",
+      "headers": [],
+      "body": {},
+      "metaSortKey": -990,
+      "parameters": [],
+      "authentication": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_saarprf_11",
+      "_type": "request",
+      "parentId": "fld_saarprf",
+      "name": "11 Filtrar UF + classificação + período — 200",
+      "method": "GET",
+      "url": "{{ _.base_url }}/filtro?uf=SP&classificacao=Com%20V%C3%ADtimas%20Fatais&dataInicio=2026-01-01&dataFim=2026-03-31&page=0&size=5",
+      "description": "",
+      "headers": [],
+      "body": {},
+      "metaSortKey": -989,
+      "parameters": [],
+      "authentication": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_saarprf_12",
+      "_type": "request",
+      "parentId": "fld_saarprf",
+      "name": "12 Importar CSV inválido (separador) — 400",
+      "method": "POST",
+      "url": "{{ _.base_url }}/importar",
+      "description": "",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "multipart/form-data"
+        }
+      ],
+      "body": {
+        "mimeType": "multipart/form-data",
+        "params": [
+          {
+            "name": "arquivo",
+            "type": "file",
+            "fileName": "C:\\Users\\caior\\OneDrive\\Área de Trabalho\\P2 - Programação Avançada Orientada a Objetos\\dados\\testes\\invalido_separador_virgula.csv"
+          }
+        ]
+      },
+      "metaSortKey": -988,
+      "parameters": [],
+      "authentication": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_saarprf_13",
+      "_type": "request",
+      "parentId": "fld_saarprf",
+      "name": "13 Importar CSV inválido (sem cabeçalho) — 400",
+      "method": "POST",
+      "url": "{{ _.base_url }}/importar",
+      "description": "",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "multipart/form-data"
+        }
+      ],
+      "body": {
+        "mimeType": "multipart/form-data",
+        "params": [
+          {
+            "name": "arquivo",
+            "type": "file",
+            "fileName": "C:\\Users\\caior\\OneDrive\\Área de Trabalho\\P2 - Programação Avançada Orientada a Objetos\\dados\\testes\\invalido_sem_cabecalho.csv"
+          }
+        ]
+      },
+      "metaSortKey": -987,
+      "parameters": [],
+      "authentication": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_saarprf_14",
+      "_type": "request",
+      "parentId": "fld_saarprf",
+      "name": "14 Reimportar linhas já gravadas — 200 (duplicadas)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/importar",
+      "description": "",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "multipart/form-data"
+        }
+      ],
+      "body": {
+        "mimeType": "multipart/form-data",
+        "params": [
+          {
+            "name": "arquivo",
+            "type": "file",
+            "fileName": "C:\\Users\\caior\\OneDrive\\Área de Trabalho\\P2 - Programação Avançada Orientada a Objetos\\dados\\carga\\reimportacao_20.csv"
+          }
+        ]
+      },
+      "metaSortKey": -986,
+      "parameters": [],
+      "authentication": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_saarprf_15",
+      "_type": "request",
+      "parentId": "fld_saarprf",
+      "name": "15 Estatística: top 10 causas — 200",
+      "method": "GET",
+      "url": "{{ _.base_url }}/estatisticas/causas",
+      "description": "",
+      "headers": [],
+      "body": {},
+      "metaSortKey": -985,
+      "parameters": [],
+      "authentication": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_saarprf_16",
+      "_type": "request",
+      "parentId": "fld_saarprf",
+      "name": "16 Estatística: evolução mensal — 200",
+      "method": "GET",
+      "url": "{{ _.base_url }}/estatisticas/mensal",
+      "description": "",
+      "headers": [],
+      "body": {},
+      "metaSortKey": -984,
+      "parameters": [],
+      "authentication": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    },
+    {
+      "_id": "req_saarprf_17",
+      "_type": "request",
+      "parentId": "fld_saarprf",
+      "name": "17 Estatística: resumo dos indicadores — 200",
+      "method": "GET",
+      "url": "{{ _.base_url }}/estatisticas/resumo?uf=SP",
+      "description": "",
+      "headers": [],
+      "body": {},
+      "metaSortKey": -983,
+      "parameters": [],
+      "authentication": {},
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global"
+    }
+  ]
+}

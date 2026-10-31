@@ -10,3 +10,7 @@ dados/brutos/
 dados/carga/
 *.zip
 dados/amostra/
+
+# relatório: PDF gerado e arquivo temporário
+docs/relatorio/*.pdf
+docs/relatorio/_render.html
